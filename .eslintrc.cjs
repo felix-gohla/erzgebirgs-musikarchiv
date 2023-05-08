@@ -7,7 +7,10 @@ module.exports = {
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
-  plugins: ['react-refresh'],
+  plugins: [
+    'react-refresh',
+    'simple-import-sort',
+  ],
   settings: {
     'import/resolver': {
       'node': {
@@ -27,8 +30,9 @@ module.exports = {
       'error',
       { vars: 'all', args: 'after-used', ignoreRestSiblings: false },
     ],
-    '@typescript-eslint/explicit-function-return-type': 'warn', // Consider using explicit annotations for object literals and function return types even when they can be inferred.
     'no-empty': 'warn',
     'semi': ['error', 'always'],
+    'simple-import-sort/imports': 'error',
+    'simple-import-sort/exports': 'error',
   },
-}
+};

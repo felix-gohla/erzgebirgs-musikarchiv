@@ -1,6 +1,6 @@
-import React, { ReactNode, useState } from 'react';
-import { CircularProgress, InputAdornment, TextField, useTheme, Autocomplete, debounce } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import { Autocomplete, CircularProgress, debounce, InputAdornment, TextField, useTheme } from '@mui/material';
+import React, { ReactNode, useState } from 'react';
 
 interface SearchFieldProps<T> {
   onChange?: (newValue: T | string | null) => void,
@@ -14,7 +14,7 @@ interface SearchFieldProps<T> {
   label: string,
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+
 export const SearchField = <T,>(props: SearchFieldProps<T>) => {
   const {
     fetchOptions,

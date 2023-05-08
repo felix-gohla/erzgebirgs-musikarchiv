@@ -1,8 +1,10 @@
 import { Box, Button, Card, CardActions, CardContent, Container, Grid, Typography, useTheme } from '@mui/material';
-import { LandingLayout } from '../components';
-import { SearchField } from '../components/SearchField';
+
 import { findSongs } from '@/services';
 import { Song } from '@/types';
+
+import { LandingLayout } from '../components';
+import { SearchField } from '../components/SearchField';
 
 export const LandingPage: React.FC = () => {
   const theme = useTheme();

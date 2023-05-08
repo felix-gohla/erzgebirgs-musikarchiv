@@ -1,11 +1,12 @@
-import React from 'react';
+import MusicNoteIcon from '@mui/icons-material/MusicNote';
+import SearchIcon from '@mui/icons-material/Search';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
 import InputBase from '@mui/material/InputBase';
-import SearchIcon from '@mui/icons-material/Search';
-import { styled, alpha } from '@mui/material/styles';
-import MusicNoteIcon from '@mui/icons-material/MusicNote';
+import { alpha, styled } from '@mui/material/styles';
+import Toolbar from '@mui/material/Toolbar';
+import React from 'react';
+
 import { Logo } from './Logo';
 
 const Search = styled('div')(({ theme }) => ({

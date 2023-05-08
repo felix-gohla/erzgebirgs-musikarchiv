@@ -1,6 +1,7 @@
-import { Author, Genre, Song } from '@/types';
 import { QueryMany } from '@directus/sdk';
 import { Directus } from '@directus/sdk';
+
+import { Author, Genre, Song } from '@/types';
 
 type MusikDbCms = {
   songs: Song;

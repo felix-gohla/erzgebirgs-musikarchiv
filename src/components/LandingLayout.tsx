@@ -1,4 +1,5 @@
 import { Box } from '@mui/material';
+
 import { TopMenu } from './TopMenu';
 
 export const LandingLayout: React.FC<React.PropsWithChildren<Record<never, never>>> = (props) => {
