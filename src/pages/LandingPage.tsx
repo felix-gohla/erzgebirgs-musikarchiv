@@ -1,6 +1,8 @@
 import { Box, Button, Card, CardActions, CardContent, Container, Grid, Typography, useTheme } from '@mui/material'
 import { LandingLayout } from '../components'
 import { SearchField } from '../components/SearchField'
+import { findSongs } from '@/services';
+import { Song } from '@/types';
 
 export const LandingPage: React.FC = () => {
   const theme = useTheme();
@@ -41,7 +43,19 @@ export const LandingPage: React.FC = () => {
     <LandingLayout>
       <Container>
         <Box sx={{ pt: theme.spacing(16), width: '100%', mx: 'auto' }}>
-          <SearchField />
+          <SearchField
+            label='Lieder Suchen…'
+            fetchOptions={async (searchTerm): Promise<Song[]> => findSongs({ filter: searchTerm !== '' ? { title: { '_contains': searchTerm } } : {}, limit: 100 })}
+            onChange={(value): void => {
+              if (!value || typeof value === 'string') {
+                return
+              }
+              // TODO: Do something with the selected song.
+              console.log('selected', value)
+            }}
+            getOptionLabel={(song: Song | string): string => typeof song !== 'string' ? song.title : song}
+            isOptionEqualToValue={(option: Song, value: Song): boolean => option.id === value.id}
+          />
         </Box>
         <Box sx={{ mt: theme.spacing(4) }}>
           <Grid container spacing={2}>
