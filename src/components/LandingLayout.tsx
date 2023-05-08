@@ -11,4 +11,4 @@ export const LandingLayout: React.FC<React.PropsWithChildren<Record<never, never
       </Box>
     </>
   );
-}
+};

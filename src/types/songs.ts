@@ -1,5 +1,5 @@
-import { Author } from "./authors";
-import { Genre } from "./genres";
+import { Author } from './authors';
+import { Genre } from './genres';
 
 /**
  * A song.
@@ -30,11 +30,11 @@ export interface Song {
      */
     pdf?: string;
     /**
-     * The file ID of the preview. 
+     * The file ID of the preview.
      */
     previewImage?: string;
     /**
-     * The file ID of the audio preview. 
+     * The file ID of the audio preview.
      */
     audio?: string;
 

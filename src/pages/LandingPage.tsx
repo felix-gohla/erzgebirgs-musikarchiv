@@ -1,6 +1,6 @@
-import { Box, Button, Card, CardActions, CardContent, Container, Grid, Typography, useTheme } from '@mui/material'
-import { LandingLayout } from '../components'
-import { SearchField } from '../components/SearchField'
+import { Box, Button, Card, CardActions, CardContent, Container, Grid, Typography, useTheme } from '@mui/material';
+import { LandingLayout } from '../components';
+import { SearchField } from '../components/SearchField';
 import { findSongs } from '@/services';
 import { Song } from '@/types';
 
@@ -37,7 +37,7 @@ export const LandingPage: React.FC = () => {
         <Button size="small">Learn More</Button>
       </CardActions>
     </Card>
-  )
+  );
 
   return (
     <LandingLayout>
@@ -48,10 +48,10 @@ export const LandingPage: React.FC = () => {
             fetchOptions={async (searchTerm): Promise<Song[]> => findSongs({ filter: searchTerm !== '' ? { title: { '_contains': searchTerm } } : {}, limit: 100 })}
             onChange={(value): void => {
               if (!value || typeof value === 'string') {
-                return
+                return;
               }
               // TODO: Do something with the selected song.
-              console.log('selected', value)
+              console.log('selected', value);
             }}
             getOptionLabel={(song: Song | string): string => typeof song !== 'string' ? song.title : song}
             isOptionEqualToValue={(option: Song, value: Song): boolean => option.id === value.id}
@@ -75,5 +75,5 @@ export const LandingPage: React.FC = () => {
         </Box>
       </Container>
     </LandingLayout>
-  )
-}
+  );
+};

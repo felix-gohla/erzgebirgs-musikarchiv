@@ -123,4 +123,4 @@ export const SearchField = <T,>(props: SearchFieldProps<T>) => {
       )}
     />
   );
-}
+};

@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box } from '@mui/material';
 import { TopMenu } from './TopMenu';
 
 export const MainLayout: React.FC<React.PropsWithChildren<Record<never, never>>> = (props) => {
@@ -11,4 +11,4 @@ export const MainLayout: React.FC<React.PropsWithChildren<Record<never, never>>>
       </Box>
     </>
   );
-}
+};

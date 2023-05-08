@@ -18,4 +18,4 @@ export const Logo: React.FC<BoxProps> = (boxProps) => (
         MUSIKDB
     </Typography>
   </Box>
-)
+);

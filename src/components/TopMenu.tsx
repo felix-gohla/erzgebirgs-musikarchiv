@@ -84,5 +84,5 @@ export const TopMenu: React.FC<TopMenuProps> = (props) => {
         }
       </Toolbar>
     </AppBar>
-  )
+  );
 };
