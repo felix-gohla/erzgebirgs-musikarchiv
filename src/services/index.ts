@@ -1,5 +1,5 @@
 export {
   findAuthors,
   findGenres,
-  findSongs
+  findSongs,
 } from './directus';

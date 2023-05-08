@@ -14,9 +14,9 @@ module.exports = {
   settings: {
     'import/resolver': {
       'node': {
-        'extensions': ['.js', '.jsx', '.ts', '.tsx']
-      }
-    }
+        'extensions': ['.js', '.jsx', '.ts', '.tsx'],
+      },
+    },
   },
   rules: {
     'react-refresh/only-export-components': 'warn',
@@ -34,5 +34,6 @@ module.exports = {
     'semi': ['error', 'always'],
     'simple-import-sort/imports': 'error',
     'simple-import-sort/exports': 'error',
+    'comma-dangle': ['error', 'always-multiline'],
   },
 };

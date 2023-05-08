@@ -67,7 +67,7 @@ export const SearchField = <T,>(props: SearchFieldProps<T>) => {
   // Debounce the search.
   const searchDelayed = React.useMemo(
     () => debounce(setSearchTerm, searchDebounce),
-    [setSearchTerm, searchDebounce]
+    [setSearchTerm, searchDebounce],
   );
 
   return (
@@ -109,8 +109,8 @@ export const SearchField = <T,>(props: SearchFieldProps<T>) => {
           }}
           sx={{
             '& .MuiInputLabel-root:not(.MuiInputLabel-shrink)': {
-              transform: 'translate(41px, 17px)'
-            }
+              transform: 'translate(41px, 17px)',
+            },
           }}
           onFocus={(): void => setShrink(true)}
           onBlur={(e): void => {
