@@ -1,5 +1,5 @@
 import SearchIcon from '@mui/icons-material/Search';
-import { Autocomplete, CircularProgress, debounce, InputAdornment, TextField, useTheme } from '@mui/material';
+import { Autocomplete, CircularProgress, debounce, InputAdornment, TextField } from '@mui/material';
 import React, { ReactNode, useState } from 'react';
 
 interface SearchFieldProps<T> {
@@ -25,7 +25,6 @@ export const SearchField = <T,>(props: SearchFieldProps<T>) => {
     searchDebounce = 250,
   } = props;
 
-  const theme = useTheme();
   const [shrink, setShrink] = useState(false);
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<readonly T[]>([]);
@@ -72,7 +71,6 @@ export const SearchField = <T,>(props: SearchFieldProps<T>) => {
 
   return (
     <Autocomplete
-      sx={{ backgroundColor: theme.palette.background.paper }}
       freeSolo
       open={open}
       onChange={(_event, data): void => {

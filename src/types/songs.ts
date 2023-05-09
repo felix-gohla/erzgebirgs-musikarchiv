@@ -1,5 +1,5 @@
-import { Author } from './authors';
-import { Genre } from './genres';
+import { AuthorRelation } from './authors';
+import { GenreRelation } from './genres';
 
 /**
  * A song.
@@ -8,15 +8,15 @@ export interface Song {
     /**
      * A unique identifier for this song.
      */
-    id: string;
+    id: number;
     /**
      * The date, this song was created.
      */
-    dateCreated: Date;
+    date_created: string;
      /**
      * The date, this song was lastly updated.
      */
-    dateUpdated: Date;
+    date_updated: string | null;
     /**
      * A name for this song.
      */
@@ -32,7 +32,7 @@ export interface Song {
     /**
      * The file ID of the preview.
      */
-    previewImage?: string;
+    preview_image?: string;
     /**
      * The file ID of the audio preview.
      */
@@ -41,10 +41,10 @@ export interface Song {
     /**
      * The authors that are linked to this song.
      */
-    authors: Author[];
+    authors: AuthorRelation[];
 
     /**
      * The genres that are linked to this song.
      */
-    genres: Genre[];
+    genres: GenreRelation[];
 }

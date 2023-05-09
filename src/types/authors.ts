@@ -5,15 +5,15 @@ export interface Author {
     /**
      * A unique identifier for this author.
      */
-    id: string;
+    id: number;
     /**
      * The date, this author was created in the database.
      */
-    dateCreated: Date;
+    date_created: string;
     /**
      * The date this author was lastly updated.
      */
-    dateUpdated: Date;
+    date_updated: string | null;
     /**
      * The author's full name.
      */
@@ -21,5 +21,10 @@ export interface Author {
     /**
      * An optional ID for an image file.
      */
-    image?: string;
+    image: string | null;
+}
+
+export interface AuthorRelation {
+    id: number,
+    authors_id: Author,
 }

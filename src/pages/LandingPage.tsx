@@ -1,4 +1,5 @@
-import { Box, Button, Card, CardActions, CardContent, Container, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Button, Card, CardActions, CardContent, Grid, Typography, useTheme } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 import { findSongs } from '@/services';
 import { Song } from '@/types';
@@ -8,6 +9,8 @@ import { SearchField } from '../components/SearchField';
 
 export const LandingPage: React.FC = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
+
   const bull = (
     <Box
       component="span"
@@ -43,39 +46,36 @@ export const LandingPage: React.FC = () => {
 
   return (
     <LandingLayout>
-      <Container>
-        <Box sx={{ pt: theme.spacing(16), width: '100%', mx: 'auto' }}>
-          <SearchField
-            label='Lieder Suchen…'
-            fetchOptions={async (searchTerm): Promise<Song[]> => findSongs({ filter: searchTerm !== '' ? { title: { '_contains': searchTerm } } : {}, limit: 100 })}
-            onChange={(value): void => {
-              if (!value || typeof value === 'string') {
-                return;
-              }
-              // TODO: Do something with the selected song.
-              console.log('selected', value);
-            }}
-            getOptionLabel={(song: Song | string): string => typeof song !== 'string' ? song.title : song}
-            isOptionEqualToValue={(option: Song, value: Song): boolean => option.id === value.id}
-          />
-        </Box>
-        <Box sx={{ mt: theme.spacing(4) }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={4}>
-              <TestCard />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <TestCard />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <TestCard />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <TestCard />
-            </Grid>
+      <Box sx={{ pt: theme.spacing(16), width: '100%', mx: 'auto' }}>
+        <SearchField
+          label='Lieder Suchen…'
+          fetchOptions={async (searchTerm): Promise<Song[]> => findSongs({ filter: searchTerm !== '' ? { title: { '_contains': searchTerm } } : {}, limit: 100 })}
+          onChange={(value): void => {
+            if (!value || typeof value === 'string') {
+              return;
+            }
+            navigate(`/song/${value.id}`);
+          }}
+          getOptionLabel={(song: Song | string): string => typeof song !== 'string' ? song.title : song}
+          isOptionEqualToValue={(option: Song, value: Song): boolean => option.id === value.id}
+        />
+      </Box>
+      <Box sx={{ mt: theme.spacing(4) }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6} md={4}>
+            <TestCard />
           </Grid>
-        </Box>
-      </Container>
+          <Grid item xs={12} sm={6} md={4}>
+            <TestCard />
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <TestCard />
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <TestCard />
+          </Grid>
+        </Grid>
+      </Box>
     </LandingLayout>
   );
 };

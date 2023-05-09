@@ -5,17 +5,22 @@ export interface Genre {
     /**
      * A unique identifier for this genre.
      */
-    id: string;
+    id: number;
     /**
      * The date, this genre was created in the database.
      */
-    dateCreated: Date;
+    date_created: string;
     /**
      * The date this genre was lastly updated.
      */
-    dateUpdated: Date;
+    date_updated: string | null;
     /**
      * The genre's name.
      */
     name: string;
+}
+
+export interface GenreRelation {
+    id: number;
+    genres_id: Genre
 }
