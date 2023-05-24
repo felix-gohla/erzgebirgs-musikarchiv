@@ -13,7 +13,7 @@ export const SongPage: React.FC = () => {
   const { id: songId } = useParams();
 
   const theme = useTheme();
-  const { data: song, isLoading } = useGetSongById(parseInt(songId || '1'), !!songId);
+  const { data: song, isLoading } = useGetSongById(parseInt(songId || '-1'), !!songId);
 
   const authors = React.useMemo(
     () => song?.authors.map((ar) => ar.authors_id).sort((lhs, rhs) => lhs.name.localeCompare(rhs.name)) || [],

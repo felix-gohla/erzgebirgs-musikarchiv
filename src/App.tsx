@@ -10,6 +10,7 @@ import { AuthorPage } from './pages/AuthorPage';
 import { LandingPage } from './pages/LandingPage';
 import { SongPage } from './pages/SongPage';
 import { generateTheme } from './theme';
+import { GenrePage } from './pages/GenrePage';
 
 export const App: React.FC = () => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
@@ -30,6 +31,7 @@ export const App: React.FC = () => {
             <Route path="/" element={<LandingPage />} />
             <Route path="/songs/:id" element={<SongPage />} />
             <Route path="/authors/:id" element={<AuthorPage />} />
+            <Route path="/genres/:id" element={<GenrePage />} />
           </Route>
         </Routes>
       </BrowserRouter>

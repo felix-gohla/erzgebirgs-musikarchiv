@@ -1,3 +1,4 @@
-export { useGetAuthorById,useGetAuthors } from './authors';
+export { useGetAuthorById, useGetAuthors } from './authors';
 export { useGetImage } from './files';
-export { useGetSongById, useGetSongs } from './songs';
+export { useGetGenreById, useGetGenres } from './genres';
+export { useGetSongById, useGetSongs, useGetSongsByAuthorId, useGetSongsByGenreId } from './songs';

@@ -1,7 +1,7 @@
 import { FileItem, FilterOperators, QueryMany } from '@directus/sdk';
 import { Directus } from '@directus/sdk';
 
-import { Author, AuthorRelation, Genre, Song } from '@/types';
+import { Author, AuthorRelation, Genre, GenreRelation, Song } from '@/types';
 
 type MusikDbCms = {
   songs: Song;
@@ -16,11 +16,13 @@ export const DIRECTUS_BASE_URL = import.meta.env.VITE_CMS_API_URL;
  */
 const directus = new Directus<MusikDbCms>(DIRECTUS_BASE_URL);
 
+const SONG_FIELDS = ['*', 'authors.authors_id.*' as 'authors', 'genres.genres_id.*' as 'genres', 'audio'] as QueryMany<Song>['fields'];
+
 export const findSongs = async (options?: QueryMany<Song>): Promise<Song[]> => {
   const songs = await directus.items('songs').readByQuery({
     ...options,
     sort: ['title'],
-    fields: ['*', 'authors.authors_id.*' as 'authors', 'genres.genre_id.*' as 'genres', 'audio'],
+    fields: SONG_FIELDS,
   });
   return songs.data || [];
 };
@@ -29,17 +31,28 @@ export const findSongById = async (id: Song['id']): Promise<Song | null | undefi
   .readOne(
     id,
     {
-      fields: ['*', 'authors.authors_id.*' as 'authors', 'genres.genres_id.*' as 'genres', 'audio'],
+      fields: SONG_FIELDS,
     },
   );
 
-export const findSonsByAuthorId = async (authorId: Author['id'], options?: QueryMany<Song>): Promise<Song[]> => {
+export const findSongsByAuthorId = async (authorId: Author['id'], options?: QueryMany<Song>): Promise<Song[]> => {
   const songs = await directus.items('songs')
     .readByQuery({
       ...options,
       sort: ['title'],
-      fields: ['*', 'authors.authors_id.*' as 'authors', 'genres.genres_id.*' as 'genres', 'audio'],
+      fields: SONG_FIELDS,
       filter: { authors: { authors_id: authorId } as FilterOperators<AuthorRelation[]> },
+    });
+  return songs.data || [];
+};
+
+export const findSonsByGenreId = async (genreId: Genre['id'], options?: QueryMany<Song>): Promise<Song[]> => {
+  const songs = await directus.items('songs')
+    .readByQuery({
+      ...options,
+      sort: ['title'],
+      fields: SONG_FIELDS,
+      filter: { genres: { genres_id: genreId } as FilterOperators<GenreRelation[]> },
     });
   return songs.data || [];
 };
@@ -67,6 +80,14 @@ export const findGenres = async (options?: QueryMany<Genre>): Promise<Genre[]> =
   });
   return genres.data || [];
 };
+
+export const findGenreById = async (id: Genre['id']): Promise<Genre | null | undefined> => directus.items('genres')
+  .readOne(
+    id,
+    {
+      fields: ['*'],
+    },
+  );
 
 export type Image = Pick<FileItem, 'id' | 'description' | 'filesize' | 'title' | 'height' | 'width' | 'location'> & { filenameDownload: string };
 

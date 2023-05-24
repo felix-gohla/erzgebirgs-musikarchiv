@@ -1,9 +1,10 @@
 export {
   findAuthorById,
   findAuthors,
+  findGenreById,
   findGenres,
   findSongById,
   findSongs,
-  findSonsByAuthorId,
+  findSongsByAuthorId as findSonsByAuthorId,
   type Image,
 } from './directus';
