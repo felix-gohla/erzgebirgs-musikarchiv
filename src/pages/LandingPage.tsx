@@ -96,7 +96,15 @@ export const LandingPage: React.FC = () => {
         </Typography>
         <SearchField
           label='Lieder Suchen…'
-          fetchOptions={async (searchTerm): Promise<Song[]> => findSongs({ filter: searchTerm !== '' ? { title: { '_contains': searchTerm } } : {}, limit: 100 })}
+          fetchOptions={async (searchTerm): Promise<Song[]> => findSongs({
+            filter: searchTerm !== '' ? { '_or': [
+              { title: { '_icontains': searchTerm } },
+              { text: { '_icontains': searchTerm } },
+              { authors: { authors_id: { name: { '_icontains': searchTerm } } } },
+              { genres: { genres_id: { name: { '_icontains': searchTerm } } } },
+            ] } : {},
+            limit: 100,
+          })}
           onChange={(value): void => {
             if (!value || typeof value === 'string') {
               return;

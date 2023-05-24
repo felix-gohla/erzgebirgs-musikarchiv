@@ -72,6 +72,8 @@ export const SearchField = <T,>(props: SearchFieldProps<T>) => {
   return (
     <Autocomplete
       freeSolo
+      filterSelectedOptions={false}
+      filterOptions={(some: T[]) => some}
       open={open}
       onChange={(_event, data): void => {
         onChange?.(data);
