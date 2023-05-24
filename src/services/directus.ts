@@ -1,7 +1,7 @@
-import { FileItem, QueryMany } from '@directus/sdk';
+import { FileItem, FilterOperators, QueryMany } from '@directus/sdk';
 import { Directus } from '@directus/sdk';
 
-import { Author, Genre, Song } from '@/types';
+import { Author, AuthorRelation, Genre, Song } from '@/types';
 
 type MusikDbCms = {
   songs: Song;
@@ -33,6 +33,16 @@ export const findSongById = async (id: Song['id']): Promise<Song | null | undefi
     },
   );
 
+export const findSonsByAuthorId = async (authorId: Author['id'], options?: QueryMany<Song>): Promise<Song[]> => {
+  const songs = await directus.items('songs')
+    .readByQuery({
+      ...options,
+      sort: ['title'],
+      fields: ['*', 'authors.authors_id.*' as 'authors', 'genres.genres_id.*' as 'genres', 'audio'],
+      filter: { authors: { authors_id: authorId } as FilterOperators<AuthorRelation[]> },
+    });
+  return songs.data || [];
+};
 
 export const findAuthors = async (options?: QueryMany<Author>): Promise<Author[]> => {
   const authors = await directus.items('authors').readByQuery({
@@ -41,6 +51,14 @@ export const findAuthors = async (options?: QueryMany<Author>): Promise<Author[]
   });
   return authors.data || [];
 };
+
+export const findAuthorById = async (id: Author['id']): Promise<Author | null | undefined> => directus.items('authors')
+  .readOne(
+    id,
+    {
+      fields: ['*'],
+    },
+  );
 
 export const findGenres = async (options?: QueryMany<Genre>): Promise<Genre[]> => {
   const genres = await directus.items('genres').readByQuery({

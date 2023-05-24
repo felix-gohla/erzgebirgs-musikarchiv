@@ -63,7 +63,7 @@ export const SongPage: React.FC = () => {
             { genres.map((genre) => (<Chip label={genre.name} key={genre.id} clickable component={Link} to={`/genres/${genre.id}`} />)) }
           </Stack>
           <Stack direction="row" spacing={1}>
-            { authors.map((author) => (<Chip label={author.name} key={author.id} clickable component={Link} to={`/genres/${author.id}`} />)) }
+            { authors.map((author) => (<Chip label={author.name} key={author.id} clickable component={Link} to={`/authors/${author.id}`} />)) }
           </Stack>
         </Grid>
         { song.preview_image && (

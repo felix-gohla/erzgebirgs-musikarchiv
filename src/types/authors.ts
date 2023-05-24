@@ -22,6 +22,14 @@ export interface Author {
      * An optional ID for an image file.
      */
     image: string | null;
+    /**
+     * A description for this author.
+     */
+    description: string | null;
+    /**
+     * The number of songs associated with the author.
+     */
+    song_count: number;
 }
 
 export interface AuthorRelation {

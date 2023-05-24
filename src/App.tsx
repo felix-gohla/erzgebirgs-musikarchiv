@@ -6,6 +6,7 @@ import {
   Routes,
 } from 'react-router-dom';
 
+import { AuthorPage } from './pages/AuthorPage';
 import { LandingPage } from './pages/LandingPage';
 import { SongPage } from './pages/SongPage';
 import { generateTheme } from './theme';
@@ -27,7 +28,8 @@ export const App: React.FC = () => {
             errorElement={<div>Error</div>}
           >
             <Route path="/" element={<LandingPage />} />
-            <Route path="/song/:id" element={<SongPage />} />
+            <Route path="/songs/:id" element={<SongPage />} />
+            <Route path="/authors/:id" element={<AuthorPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
