@@ -1,4 +1,3 @@
 export { DirectusImage } from './DirectusImage';
-export { LandingLayout } from './LandingLayout';
+export { LandingLayout, MainLayout } from './layouts';
 export { Loader } from './Loader';
-export { MainLayout } from './MainLayout';

@@ -3,7 +3,7 @@ import MusicIcon from '@mui/icons-material/MusicNote';
 import PersonIcon from '@mui/icons-material/Person';
 import TheaterComedyIcon from '@mui/icons-material/TheaterComedy';
 import { Box, Button, Card, CardActions, CardContent, Grid, Typography, useTheme } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { findSongs } from '@/services';
 import { Song } from '@/types';
@@ -14,15 +14,6 @@ import { SearchField } from '../components/SearchField';
 export const LandingPage: React.FC = () => {
   const theme = useTheme();
   const navigate = useNavigate();
-
-  // const bull = (
-  //   <Box
-  //     component="span"
-  //     sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-  //   >
-  //     •
-  //   </Box>
-  // );
 
   const AToZCard: React.FC = () => (
     <Card sx={{ minWidth: 275 }} elevation={3}>
@@ -38,7 +29,7 @@ export const LandingPage: React.FC = () => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" startIcon={<RightArrowIcon />}>Durchsuchen</Button>
+        <Button component={Link} to={'/songs/'}  size="small" startIcon={<RightArrowIcon />}>Durchsuchen</Button>
       </CardActions>
     </Card>
   );

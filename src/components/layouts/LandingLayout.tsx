@@ -1,6 +1,6 @@
 import { Container, useTheme } from '@mui/material';
 
-import { TopMenu } from './TopMenu';
+import { TopMenu } from '@/components/TopMenu';
 
 export const LandingLayout: React.FC<React.PropsWithChildren<Record<never, never>>> = (props) => {
   const { children } = props;
@@ -12,7 +12,7 @@ export const LandingLayout: React.FC<React.PropsWithChildren<Record<never, never
       <Container
         component="main"
         maxWidth="xl"
-        sx={{ flexGrow: 1, py: theme.spacing(4), position: 'relative' }}
+        sx={{ flexGrow: 1, py: theme.spacing(4), position: 'relative', minWidth: '300px' }}
       >
         { children }
       </Container>
