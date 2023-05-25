@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { Image } from '@/services';
-import { getImage } from '@/services/directus';
+import { File, getFile,getImage, Image } from '@/services';
 
 export const useGetImage = (imageId: string) => {
   const [file, setFile] = React.useState<Image | null>(null);
@@ -20,6 +19,28 @@ export const useGetImage = (imageId: string) => {
       active = false;
     };
   }, [imageId]);
+
+  return file;
+};
+
+
+export const useGetFile = (fileId: string) => {
+  const [file, setFile] = React.useState<File | null>(null);
+
+  React.useEffect(() => {
+    let active = true;
+
+    (async () => {
+      const file = await getFile(fileId);
+      if (active) {
+        setFile(file);
+      }
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [fileId]);
 
   return file;
 };

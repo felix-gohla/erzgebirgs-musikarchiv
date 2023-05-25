@@ -1,4 +1,6 @@
 export {
+  assetUrlFromFileId,
+  type File,
   findAuthorById,
   findAuthors,
   findGenreById,
@@ -6,5 +8,7 @@ export {
   findSongById,
   findSongs,
   findSongsByAuthorId as findSonsByAuthorId,
+  getFile,
+  getImage,
   type Image,
 } from './directus';

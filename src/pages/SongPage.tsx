@@ -4,7 +4,7 @@ import { Box, Button, Chip, Grid, Stack, Typography,useTheme } from '@mui/materi
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 
-import { DirectusImage, Loader, MainLayout } from '@/components';
+import { DirectusAudioPlayer, DirectusImage, Loader, MainLayout } from '@/components';
 import { useGetSongById } from '@/hooks';
 import { DIRECTUS_BASE_URL } from '@/services/directus';
 import { DOMPurify } from '@/utils';
@@ -81,6 +81,14 @@ export const SongPage: React.FC = () => {
             dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(song.text) }}
           />
         </Grid>
+        { song.audio &&
+          <Grid item xs={12}>
+            <DirectusAudioPlayer
+              fileId={song.audio}
+              title="Audiovorschau"
+            />
+          </Grid>
+        }
         {
           songPdfDownloadLink && (
             <Grid item xs={12} sm={4} md={3} lg={2}>
@@ -88,7 +96,7 @@ export const SongPage: React.FC = () => {
                 startIcon={<PictureAsPdfIcon />}
                 fullWidth
                 variant="contained"
-                target="_blank"
+                target="_top"
                 href={songPdfDownloadLink}
                 download={pdfName}
               >
@@ -104,7 +112,7 @@ export const SongPage: React.FC = () => {
                 startIcon={<AudioFileIcon />}
                 fullWidth
                 variant="contained"
-                target="_blank"
+                target="_top"
                 href={songAudioDownloadLink}
               >
                 Audio-Download

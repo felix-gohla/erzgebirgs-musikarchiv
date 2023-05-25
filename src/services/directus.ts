@@ -11,6 +11,18 @@ type MusikDbCms = {
 
 export const DIRECTUS_BASE_URL = import.meta.env.VITE_CMS_API_URL;
 
+export const assetUrlFromFileId = (fileId: string, options?: { download?: boolean, downloadFilename?: string }) => {
+  const { download = false, downloadFilename } = options || {};
+  const url = new URL(`/assets/${fileId}`, DIRECTUS_BASE_URL);
+  if (download) {
+    url.searchParams.set('download', 'true');
+  }
+  if (downloadFilename) {
+    url.pathname += `/${downloadFilename}`;
+  }
+  return url;
+};
+
 /**
  * The main API instance.
  */
@@ -88,6 +100,24 @@ export const findGenreById = async (id: Genre['id']): Promise<Genre | null | und
       fields: ['*'],
     },
   );
+
+export type File = Pick<FileItem, 'id' | 'description' | 'filesize' | 'title' | 'location'> & { filenameDownload: string };
+
+export const getFile = async (fileId: string): Promise<File | null> => {
+  const file = await directus.files.readOne(fileId);
+  if (!file) {
+    return null;
+  }
+  return {
+    id: file.id,
+    description: file.description,
+    filesize: file.filesize,
+    filenameDownload: file.filename_download,
+    title: file.title,
+    location: file.location,
+  };
+};
+
 
 export type Image = Pick<FileItem, 'id' | 'description' | 'filesize' | 'title' | 'height' | 'width' | 'location'> & { filenameDownload: string };
 
