@@ -2,7 +2,7 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { DirectusImage, Loader, MainLayout } from '@/components';
+import { DirectusImage, HtmlText, Loader, MainLayout } from '@/components';
 import { SearchableTable } from '@/components/SearchableTable';
 import { useGetAuthorById } from '@/hooks';
 import { useGetSongsByAuthorId } from '@/hooks/songs';
@@ -65,10 +65,7 @@ export const AuthorPage: React.FC = () => {
           author.description
             ? (
               <Grid item xs={12}>
-                <Box
-                  component="div"
-                  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(author.description) }}
-                />
+                <HtmlText html={author.description} />
               </Grid>
             )
             : <Typography>Für {author.name} wurde kein Beschreibungstext angegeben.</Typography>

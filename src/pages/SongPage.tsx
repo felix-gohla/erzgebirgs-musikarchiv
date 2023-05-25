@@ -1,13 +1,12 @@
 import AudioFileIcon from '@mui/icons-material/AudioFile';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import { Box, Button, Chip, Grid, Stack, Typography,useTheme } from '@mui/material';
+import { Button, Chip, Grid, Stack, Typography,useTheme } from '@mui/material';
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 
-import { DirectusAudioPlayer, DirectusImage, Loader, MainLayout } from '@/components';
+import { DirectusAudioPlayer, DirectusImage, HtmlText, Loader, MainLayout } from '@/components';
 import { useGetSongById } from '@/hooks';
 import { DIRECTUS_BASE_URL } from '@/services/directus';
-import { DOMPurify } from '@/utils';
 
 export const SongPage: React.FC = () => {
   const { id: songId } = useParams();
@@ -75,11 +74,7 @@ export const SongPage: React.FC = () => {
           </Grid>
         )}
         <Grid item xs={12}>
-          <Box
-            component="div"
-            sx={{ hyphens: 'auto' }}
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(song.text) }}
-          />
+          <HtmlText html={song.text} />
         </Grid>
         { song.audio &&
           <Grid item xs={12}>

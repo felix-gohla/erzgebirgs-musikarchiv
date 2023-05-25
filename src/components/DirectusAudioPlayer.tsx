@@ -100,7 +100,7 @@ export const DirectusAudioPlayer: React.FC<DirectusAudioPlayerProps> = (props) =
     if (!audio) {
       return;
     }
-    audio.fastSeek(Math.max(audio.currentTime - 1.0, 0));
+    audio.currentTime = Math.max(audio.currentTime - 1.0, 0);
   }, []);
 
   const handleForward = React.useCallback(() => {
@@ -108,7 +108,7 @@ export const DirectusAudioPlayer: React.FC<DirectusAudioPlayerProps> = (props) =
     if (!audio || Number.isNaN(duration)) {
       return;
     }
-    audio.fastSeek(Math.min(audio.currentTime + 1.0, duration));
+    audio.currentTime = Math.min(audio.currentTime + 1.0, duration);
   }, [audioElement, duration]);
 
   const handleFinish = React.useCallback(() => {
@@ -130,7 +130,7 @@ export const DirectusAudioPlayer: React.FC<DirectusAudioPlayerProps> = (props) =
       return;
     }
     audio.pause();
-    audio.fastSeek(position);
+    audio.currentTime = position;
   }, [audioElement]);
 
   const handleSeekFinished = React.useCallback((position: number | number[]) => {
@@ -138,7 +138,7 @@ export const DirectusAudioPlayer: React.FC<DirectusAudioPlayerProps> = (props) =
     if (Array.isArray(position) || !audio) {
       return;
     }
-    audio.fastSeek(position);
+    audio.currentTime = position;
     if (isPlaying) {
       audio.play();
     }

@@ -7,4 +7,4 @@ export const generateTheme = (prefersDarkMode: boolean) => responsiveFontSizes(c
   palette: {
     mode: prefersDarkMode ? 'dark' : 'light',
   },
-}));
+}), { factor: 2.5 });
