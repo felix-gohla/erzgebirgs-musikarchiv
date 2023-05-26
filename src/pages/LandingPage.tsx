@@ -3,17 +3,14 @@ import MusicIcon from '@mui/icons-material/MusicNote';
 import PersonIcon from '@mui/icons-material/Person';
 import TheaterComedyIcon from '@mui/icons-material/TheaterComedy';
 import { Box, Button, Card, CardActions, CardContent, Grid, Typography, useTheme } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-import { findSongs } from '@/services';
-import { Song } from '@/types';
+import { DatabaseSearchField } from '@/components/DatabaseSearchField';
 
 import { LandingLayout } from '../components';
-import { SearchField } from '../components/SearchField';
 
 export const LandingPage: React.FC = () => {
   const theme = useTheme();
-  const navigate = useNavigate();
 
   const AToZCard: React.FC = () => (
     <Card sx={{ minWidth: 275 }} elevation={3}>
@@ -85,26 +82,7 @@ export const LandingPage: React.FC = () => {
           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Hic aliquam molestias quibusdam, neque quo suscipit facilis temporibus nemo cumque et accusantium dolorem, culpa fuga esse consequatur aperiam. Dolorem, cupiditate? Pariatur?
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Est repellat aut provident nesciunt illo hic ad laborum quis, recusandae eligendi. Sequi magnam aspernatur ad unde consequatur? Tenetur eius quis modi.
         </Typography>
-        <SearchField
-          label='Lieder Suchen…'
-          fetchOptions={async (searchTerm): Promise<Song[]> => findSongs({
-            filter: searchTerm !== '' ? { '_or': [
-              { title: { '_icontains': searchTerm } },
-              { text: { '_icontains': searchTerm } },
-              { authors: { authors_id: { name: { '_icontains': searchTerm } } } },
-              { genres: { genres_id: { name: { '_icontains': searchTerm } } } },
-            ] } : {},
-            limit: 100,
-          })}
-          onChange={(value): void => {
-            if (!value || typeof value === 'string') {
-              return;
-            }
-            navigate(`/songs/${value.id}`);
-          }}
-          getOptionLabel={(song: Song | string): string => typeof song !== 'string' ? song.title : song}
-          isOptionEqualToValue={(option: Song, value: Song): boolean => option.id === value.id}
-        />
+        <DatabaseSearchField label="Suchen…" />
       </Box>
       <Box sx={{ mt: theme.spacing(4) }}>
         <Grid container spacing={2}>

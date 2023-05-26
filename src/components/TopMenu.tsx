@@ -3,8 +3,8 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import React from 'react';
 
+import { DatabaseSearchField } from './DatabaseSearchField';
 import { Logo } from './Logo';
-import { SongSearchField } from './SongSearchField';
 interface TopMenuProps {
   showSearchBar?: boolean;
 }
@@ -23,7 +23,7 @@ export const TopMenu: React.FC<TopMenuProps> = (props) => {
           showSearchBar && (
             <>
               <Box sx={{ flexGrow: 1, height: '100%' }} />
-              <SongSearchField variant="growing" />
+              <DatabaseSearchField variant="growing" />
               <Box sx={{ flexGrow: 1, display: { 'sm': 'none', 'md': 'initial' } }} />
             </>
           )

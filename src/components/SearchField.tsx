@@ -1,5 +1,5 @@
 import SearchIcon from '@mui/icons-material/Search';
-import { alpha, Autocomplete, AutocompleteProps, CircularProgress, debounce, InputAdornment, TextField, useTheme } from '@mui/material';
+import { alpha, Autocomplete, AutocompleteProps, AutocompleteRenderGroupParams, CircularProgress, debounce, InputAdornment, TextField, useTheme } from '@mui/material';
 import React, { ReactNode, useState } from 'react';
 
 export interface SearchFieldProps<T> {
@@ -13,6 +13,8 @@ export interface SearchFieldProps<T> {
   searchDebounce?: number,
   label: string,
   variant?: 'standard' | 'growing',
+  groupBy?: (option: T) => string,
+  renderGroup?: (params: AutocompleteRenderGroupParams) => React.ReactNode
 }
 
 export const SearchField = <T,>(props: SearchFieldProps<T>) => {
@@ -24,6 +26,8 @@ export const SearchField = <T,>(props: SearchFieldProps<T>) => {
     onChange,
     searchDebounce = 250,
     variant = 'standard',
+    groupBy,
+    renderGroup,
   } = props;
 
   const theme = useTheme();
@@ -111,6 +115,8 @@ export const SearchField = <T,>(props: SearchFieldProps<T>) => {
       filterSelectedOptions={false}
       filterOptions={(some: T[]) => some}
       open={open}
+      groupBy={groupBy}
+      renderGroup={renderGroup}
       onChange={(_event, data): void => {
         onChange?.(data);
       }}
