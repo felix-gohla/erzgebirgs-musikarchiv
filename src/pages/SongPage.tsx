@@ -77,12 +77,12 @@ export const SongPage: React.FC = () => {
           <HtmlText html={song.text} />
         </Grid>
         { song.audio &&
-          <Grid item xs={12}>
-            <DirectusAudioPlayer
-              fileId={song.audio}
-              title="Audiovorschau"
-            />
-          </Grid>
+            <Grid item xs={12}>
+              <DirectusAudioPlayer
+                fileId={song.audio}
+                title="Audiovorschau"
+              />
+            </Grid>
         }
         {
           songPdfDownloadLink && (

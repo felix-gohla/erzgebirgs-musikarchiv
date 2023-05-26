@@ -221,7 +221,7 @@ type SearchableTableProps<T extends TypeWithId> = {
   subtitle?: string,
 } & ({
   enableSelection: false,
-  onClick?: (row: T['id']) => void | Promise<void>,
+  onClick?: (event: React.MouseEvent, row: T['id']) => void | Promise<void>,
 } | {
   enableSelection: true,
   onSelect?: (rows: readonly T['id'][]) => void | Promise<void>,
@@ -269,9 +269,9 @@ export const SearchableTable = <T extends TypeWithId,>(props: SearchableTablePro
     setSelected([]);
   };
 
-  const handleClick = (_event: React.MouseEvent<unknown>, id: T['id']) => {
+  const handleClick = (event: React.MouseEvent, id: T['id']) => {
     if (!props.enableSelection) {
-      props.onClick?.(id);
+      props.onClick?.(event, id);
       return;
     }
 
@@ -354,7 +354,7 @@ export const SearchableTable = <T extends TypeWithId,>(props: SearchableTablePro
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.id)}
+                    onClick={(event) => { handleClick(event, row.id); return false;}}
                     role={enableSelection ? 'checkbox' : 'row'}
                     aria-checked={isItemSelected}
                     tabIndex={-1}

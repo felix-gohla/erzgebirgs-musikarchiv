@@ -2,7 +2,7 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { DirectusImage, HtmlText, Loader, MainLayout } from '@/components';
+import { DirectusAudioPlayer, DirectusImage, HtmlText, Loader, MainLayout } from '@/components';
 import { SearchableTable } from '@/components/SearchableTable';
 import { useGetAuthorById } from '@/hooks';
 import { useGetSongsByAuthorId } from '@/hooks/songs';
@@ -77,7 +77,7 @@ export const AuthorPage: React.FC = () => {
           subtitle={`Folgende Lieder wurden für ${author.name} gefunden:`}
           data={songs || []}
           enableSelection={false}
-          onClick={(songId) => { navigate(`/songs/${songId}`); }}
+          onClick={(_event, songId) => { navigate(`/songs/${songId}`); }}
           columns={[
             {
               id: 'preview_image',
@@ -108,6 +108,18 @@ export const AuthorPage: React.FC = () => {
                     {DOMPurify.sanitize(o.text, { RETURN_DOM_FRAGMENT: true }).textContent || ''}
                   </Typography>
                 );
+              },
+            },
+            {
+              id: 'audio',
+              label: 'Audiovorschau',
+              sortable: false,
+              align: 'center',
+              renderRow: (o) => {
+                if (!o.audio) {
+                  return null;
+                }
+                return (<DirectusAudioPlayer variant="mini" fileId={o.audio} />);
               },
             },
           ]}
