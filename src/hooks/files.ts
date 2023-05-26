@@ -3,15 +3,18 @@ import React from 'react';
 import { File, getFile,getImage, Image } from '@/services';
 
 export const useGetImage = (imageId: string) => {
-  const [file, setFile] = React.useState<Image | null>(null);
+  const [image, setImage] = React.useState<Image | null>(null);
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
   React.useEffect(() => {
     let active = true;
+    setIsLoading(true);
 
     (async () => {
       const image = await getImage(imageId);
       if (active) {
-        setFile(image);
+        setImage(image);
+        setIsLoading(false);
       }
     })();
 
@@ -20,20 +23,26 @@ export const useGetImage = (imageId: string) => {
     };
   }, [imageId]);
 
-  return file;
+  return {
+    image,
+    isLoading,
+  };
 };
 
 
 export const useGetFile = (fileId: string) => {
   const [file, setFile] = React.useState<File | null>(null);
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
   React.useEffect(() => {
     let active = true;
+    setIsLoading(true);
 
     (async () => {
       const file = await getFile(fileId);
       if (active) {
         setFile(file);
+        setIsLoading(false);
       }
     })();
 
@@ -42,5 +51,8 @@ export const useGetFile = (fileId: string) => {
     };
   }, [fileId]);
 
-  return file;
+  return {
+    file,
+    isLoading,
+  };
 };

@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Skeleton, Typography } from '@mui/material';
 import React from 'react';
 
 import { useGetImage } from '@/hooks';
@@ -11,12 +11,18 @@ interface DirectusImageProps extends React.DetailedHTMLProps<React.ImgHTMLAttrib
 export const DirectusImage: React.FC<DirectusImageProps> = (props) => {
   const { fileId, ...rest } = props;
 
-  const image = useGetImage(fileId);
+  const { image, isLoading } = useGetImage(fileId);
 
   const url = React.useMemo(
     () => assetUrlFromFileId(fileId, { download: true, downloadFilename: image?.filenameDownload || '' }),
     [fileId, image?.filenameDownload],
   );
+
+  if (isLoading) {
+    return (
+      <Skeleton variant="rounded" width="100%" height="100%" />
+    );
+  }
 
   if (!image) {
     return (<Typography>Bild konnte nicht geladen werden.</Typography>);
