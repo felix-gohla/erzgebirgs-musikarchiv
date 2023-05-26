@@ -14,6 +14,7 @@ export const Logo: React.FC<BoxProps<'a'>> = (boxProps) => {
         minWidth: '200px',
         alignItems: 'center',
         display: 'flex',
+        position: 'absolute',
       }}
       component={Link}
       to="/"

@@ -328,7 +328,7 @@ export const SearchableTable = <T extends TypeWithId,>(props: SearchableTablePro
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
+      <Paper sx={{ width: '100%', mb: 2 }} elevation={3}>
         <EnhancedTableToolbar title={tableTitle} subtitle={subtitle} numSelected={selected.length} />
         <TableContainer>
           <Table
