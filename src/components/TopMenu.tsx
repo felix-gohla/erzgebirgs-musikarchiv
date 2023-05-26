@@ -1,4 +1,3 @@
-import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -16,10 +15,9 @@ export const TopMenu: React.FC<TopMenuProps> = (props) => {
   return (
     <AppBar position="sticky">
       <Toolbar>
-        <MusicNoteIcon sx={{ display: 'flex', mr: 1 }} />
         <Logo sx={{
           mr: 2,
-          display: showSearchBar ? { xs: 'none', md: 'flex' } : undefined,
+          display: showSearchBar ? { xs: 'none' } : undefined,
         }} />
         {
           showSearchBar && (
