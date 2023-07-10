@@ -1,9 +1,43 @@
-import MusicNoteIcon from '@mui/icons-material/MusicNote';
-import { Box, BoxProps, Typography } from '@mui/material';
+import { Box, BoxProps } from '@mui/material';
 import { Link } from 'react-router-dom';
 
-export const Logo: React.FC<BoxProps<'a'>> = (boxProps) => {
-  const { sx, ...rest } = boxProps;
+import { ReactComponent as LogoTextAside } from '@/assets/logo-text-aside.svg';
+import { ReactComponent as LogoTextBelow } from '@/assets/logo-text-below.svg';
+
+type LogoBaseProps = {
+  variant?: 'text-below' | 'text-aside',
+}
+type LogoPropsWithLink = LogoBaseProps & BoxProps<'a'> & {
+  useLink: true,
+}
+
+type LogoPropsWithoutLink = LogoBaseProps & BoxProps<'div'> & {
+  useLink?: false,
+}
+
+type LogoProps = LogoPropsWithLink | LogoPropsWithoutLink;
+
+export const Logo: React.FC<LogoProps> = (props = { variant: 'text-below', useLink: true }) => {
+  const logo = props.variant === 'text-below' ? <LogoTextBelow fill='currentColor' /> : <LogoTextAside fill='currentColor' />;
+
+  if (!props.useLink) {
+    const { sx, useLink: _useLink,  ...rest } = props;
+    return (<Box
+      {...rest}
+      sx={{
+        ...sx,
+        color: 'inherit',
+        textDecoration: 'none',
+        alignItems: 'center',
+        display: 'flex',
+      }}
+      component = 'div'
+    >
+      { logo }
+    </Box>);
+  }
+
+  const { sx, useLink: _useLink, ...rest } = props;
   return (
     <Box
       {...rest}
@@ -11,27 +45,13 @@ export const Logo: React.FC<BoxProps<'a'>> = (boxProps) => {
         ...sx,
         color: 'inherit',
         textDecoration: 'none',
-        minWidth: '200px',
         alignItems: 'center',
         display: 'flex',
-        position: 'absolute',
       }}
       component={Link}
       to="/"
     >
-      <MusicNoteIcon sx={{ display: 'inline', mr: 1 }} />
-      <Typography
-        variant="h6"
-        noWrap
-        sx={{
-          fontFamily: 'monospace',
-          fontWeight: 700,
-          letterSpacing: '.3rem',
-          display: 'inline',
-        }}
-      >
-        MUSIKDB
-      </Typography>
+      { logo }
     </Box>
   );
 };

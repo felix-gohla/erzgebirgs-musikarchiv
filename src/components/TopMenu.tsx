@@ -15,10 +15,15 @@ export const TopMenu: React.FC<TopMenuProps> = (props) => {
   return (
     <AppBar position="sticky">
       <Toolbar>
-        <Logo sx={{
-          mr: 2,
-          display: showSearchBar ? { xs: 'none' } : undefined,
-        }} />
+        <Logo
+          useLink
+          sx={{
+            mr: 2,
+            my: 2,
+            display: showSearchBar ? { xs: 'none' } : undefined,
+          }}
+          width={{ xs: 128, sm: 192 }}
+        />
         {
           showSearchBar && (
             <>
