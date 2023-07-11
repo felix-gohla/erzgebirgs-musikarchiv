@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom';
 
 import { ReactComponent as LogoTextAside } from '@/assets/logo-text-aside.svg';
 import { ReactComponent as LogoTextBelow } from '@/assets/logo-text-below.svg';
+import { ReactComponent as LogoNoText } from '@/assets/logo-no-text.svg';
 
 type LogoBaseProps = {
-  variant?: 'text-below' | 'text-aside',
+  variant?: 'text-below' | 'text-aside' | 'no-text',
 }
 type LogoPropsWithLink = LogoBaseProps & BoxProps<'a'> & {
   useLink: true,
@@ -17,13 +18,21 @@ type LogoPropsWithoutLink = LogoBaseProps & BoxProps<'div'> & {
 
 type LogoProps = LogoPropsWithLink | LogoPropsWithoutLink;
 
-export const Logo: React.FC<LogoProps> = (props = { variant: 'text-below', useLink: true }) => {
-  const logo = props.variant === 'text-below' ? <LogoTextBelow fill='currentColor' /> : <LogoTextAside fill='currentColor' />;
+export const Logo: React.FC<LogoProps> = (props) => {
+  const { variant = 'text-aside', ...rest } = props;
+  let logo: React.ReactNode;
+  if (variant === 'text-below') {
+    logo = <LogoTextBelow fill='currentColor' />;
+  } else if (variant === 'text-aside') {
+    logo = <LogoTextAside fill='currentColor' />;
+  } else {
+    logo = <LogoNoText fill='currentColor' />;
+  }
 
-  if (!props.useLink) {
-    const { sx, useLink: _useLink,  ...rest } = props;
+  if (!rest.useLink) {
+    const { sx, useLink: _useLink, ...propsRest } = rest;
     return (<Box
-      {...rest}
+      {...propsRest}
       sx={{
         ...sx,
         color: 'inherit',
@@ -37,10 +46,10 @@ export const Logo: React.FC<LogoProps> = (props = { variant: 'text-below', useLi
     </Box>);
   }
 
-  const { sx, useLink: _useLink, ...rest } = props;
+  const { sx, useLink: _useLink, ...propsRest } = rest;
   return (
     <Box
-      {...rest}
+      {...propsRest}
       sx={{
         ...sx,
         color: 'inherit',
