@@ -4,10 +4,13 @@ import React from 'react';
 import { findAuthorById,findAuthors } from '@/services';
 import { Author } from '@/types';
 
+import { useDeepCompareMemoize } from '.';
 import { FetchingHook, useBaseFetchHook } from './utils';
 
+
 export const useGetAuthors = (options?: QueryMany<Author>, enabled = true): FetchingHook<Author[]> => {
-  const fetcher = React.useCallback(() => findAuthors(options), [options]);
+  const memoizedOptions = useDeepCompareMemoize(options);
+  const fetcher = React.useCallback(() => findAuthors(memoizedOptions), [memoizedOptions]);
   return useBaseFetchHook(fetcher, enabled);
 };
 
