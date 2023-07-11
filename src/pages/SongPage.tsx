@@ -1,12 +1,9 @@
-import AudioFileIcon from '@mui/icons-material/AudioFile';
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import { Button, Chip, Grid, Stack, Typography,useTheme } from '@mui/material';
+import { Chip, Grid, Stack, Typography, useTheme } from '@mui/material';
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 
-import { DirectusAudioPlayer, DirectusImage, HtmlText, Loader, MainLayout } from '@/components';
+import { AudioDownloadButton, DirectusAudioPlayer, DirectusImage, HtmlText, Loader, MainLayout, PdfDownloadButton } from '@/components';
 import { useGetSongById } from '@/hooks';
-import { DIRECTUS_BASE_URL } from '@/services/directus';
 
 export const SongPage: React.FC = () => {
   const { id: songId } = useParams();
@@ -47,10 +44,6 @@ export const SongPage: React.FC = () => {
     );
   }
 
-  const songPdfDownloadLink = song.pdf ? `${DIRECTUS_BASE_URL}/assets/${song.pdf}?download` : null;
-  const pdfName = song.title.toLowerCase().replaceAll(/[^A-Za-z0-9]/g, '-') + '.pdf';
-  const songAudioDownloadLink = song.audio ? `${DIRECTUS_BASE_URL}/assets/${song.audio}?download` : null;
-
   return (
     <MainLayout>
       <Grid container spacing={2}>
@@ -84,36 +77,15 @@ export const SongPage: React.FC = () => {
               />
             </Grid>
         }
-        {
-          songPdfDownloadLink && (
-            <Grid item xs={12} sm={4} md={3} lg={2}>
-              <Button
-                startIcon={<PictureAsPdfIcon />}
-                fullWidth
-                variant="contained"
-                target="_top"
-                href={songPdfDownloadLink}
-                download={pdfName}
-              >
-                Noten-Download
-              </Button>
-            </Grid>
-          )
+        { song.pdf &&
+        <Grid item xs={12} sm={4} md={3} lg={2}>
+          <PdfDownloadButton song={song} />
+        </Grid>
         }
-        {
-          songAudioDownloadLink && (
-            <Grid item xs={12} sm={4} md={3} lg={2}>
-              <Button
-                startIcon={<AudioFileIcon />}
-                fullWidth
-                variant="contained"
-                target="_top"
-                href={songAudioDownloadLink}
-              >
-                Audio-Download
-              </Button>
-            </Grid>
-          )
+        { song.audio &&
+          <Grid item xs={12} sm={4} md={3} lg={2}>
+            <AudioDownloadButton song={song} />
+          </Grid>
         }
       </Grid>
     </MainLayout>
