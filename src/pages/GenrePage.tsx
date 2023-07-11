@@ -56,7 +56,7 @@ export const GenrePage: React.FC = () => {
           subtitle={`Folgende Lieder wurden für ${genre.name} gefunden:`}
           data={songs || []}
           enableSelection={false}
-          onClick={(songId) => { navigate(`/songs/${songId}`); }}
+          onClick={(_event, songId) => { navigate(`/songs/${songId}`); }}
           columns={[
             {
               id: 'preview_image',
