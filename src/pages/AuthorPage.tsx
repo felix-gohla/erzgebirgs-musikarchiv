@@ -47,11 +47,16 @@ export const AuthorPage: React.FC = () => {
 
   return (
     <MainLayout>
-      <Grid container sx={{ mb: theme.spacing(2) }}>
+      <Grid container sx={{ mb: theme.spacing(2) }} rowSpacing={2} columnSpacing={2}>
         <Grid item xs={12} lg={author.image ? 8 : 12}>
           <Typography variant='h1'>
             { author.name }
           </Typography>
+          {
+            author.description
+              ? <HtmlText html={author.description} />
+              : <Typography variant='subtitle1'>Für {author.name} wurde kein Beschreibungstext angegeben.</Typography>
+          }
         </Grid>
         { author.image && (
           <Grid item xs={12} lg={4} sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -61,17 +66,8 @@ export const AuthorPage: React.FC = () => {
             />
           </Grid>
         )}
-        {
-          author.description
-            ? (
-              <Grid item xs={12}>
-                <HtmlText html={author.description} />
-              </Grid>
-            )
-            : <Typography>Für {author.name} wurde kein Beschreibungstext angegeben.</Typography>
-        }
       </Grid>
-      <Box>
+      <Box sx={{ mt: theme.spacing(4) }}>
         <SearchableTable
           tableTitle='Lieder'
           subtitle={`Folgende Lieder wurden für ${author.name} gefunden:`}
@@ -91,14 +87,14 @@ export const AuthorPage: React.FC = () => {
               label: 'Titel',
               align: 'left',
               sortable: true,
-              width: '30%',
+              minWidth: '30%',
               comparator: (order, lhs, rhs) => (order === 'asc' ? lhs.title.localeCompare(rhs.title) : rhs.title.localeCompare(lhs.title)),
             },
             {
               id: 'text',
               label: 'Text',
               sortable: false,
-              width: '100%',
+              minWidth: '100%',
               renderRow: (o) => {
                 return (
                   <Typography

@@ -9,66 +9,64 @@ import { DatabaseSearchField } from '@/components/DatabaseSearchField';
 import { LandingLayout } from '@/components/layouts/';
 import { Logo } from '@/components/Logo';
 
+const AToZCard: React.FC = () => (
+  <Card sx={{ minWidth: 275 }} elevation={3}>
+    <CardContent>
+      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+        Stöbern
+      </Typography>
+      <Typography variant="h5" component="div">
+        <MusicIcon />&nbsp;Alle Lieder von A-Z
+      </Typography>
+      <Typography variant="body2">
+        Eine Auflistung aller verzeichneten Lieder.
+      </Typography>
+    </CardContent>
+    <CardActions>
+      <Button component={Link} to={'/songs/'}  size="small" startIcon={<RightArrowIcon />}>Durchsuchen</Button>
+    </CardActions>
+  </Card>
+);
+const AuthorsCard: React.FC = () => (
+  <Card sx={{ minWidth: 275 }} elevation={3}>
+    <CardContent>
+      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+        Beteiligte
+      </Typography>
+      <Typography variant="h5" component="div">
+        <PersonIcon />&nbsp;Autorenverzeichnis
+      </Typography>
+      <Typography variant="body2">
+        Eine Auflistung aller beteiligten Autoren.
+      </Typography>
+    </CardContent>
+    <CardActions>
+      <Button size="small" startIcon={<RightArrowIcon />}>Durchsuchen</Button>
+    </CardActions>
+  </Card>
+);
+
+const GenresCard: React.FC = () => (
+  <Card sx={{ minWidth: 275 }} elevation={3}>
+    <CardContent>
+      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+        Stilrichtungen
+      </Typography>
+      <Typography variant="h5" component="div">
+        <TheaterComedyIcon />&nbsp;Genreverzeichnis
+      </Typography>
+      <Typography variant="body2">
+        Eine Auflistung aller Genres.
+      </Typography>
+    </CardContent>
+    <CardActions>
+      <Button size="small" startIcon={<RightArrowIcon />}>Durchsuchen</Button>
+    </CardActions>
+  </Card>
+);
+
 export const LandingPage: React.FC = () => {
   const theme = useTheme();
-
-  const AToZCard: React.FC = () => (
-    <Card sx={{ minWidth: 275 }} elevation={3}>
-      <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Stöbern
-        </Typography>
-        <Typography variant="h5" component="div">
-          <MusicIcon />&nbsp;Alle Lieder von A-Z
-        </Typography>
-        <Typography variant="body2">
-          Eine Auflistung aller verzeichneten Lieder.
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button component={Link} to={'/songs/'}  size="small" startIcon={<RightArrowIcon />}>Durchsuchen</Button>
-      </CardActions>
-    </Card>
-  );
-
-  const AuthorsCard: React.FC = () => (
-    <Card sx={{ minWidth: 275 }} elevation={3}>
-      <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Beteiligte
-        </Typography>
-        <Typography variant="h5" component="div">
-          <PersonIcon />&nbsp;Autorenverzeichnis
-        </Typography>
-        <Typography variant="body2">
-          Eine Auflistung aller beteiligten Autoren.
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small" startIcon={<RightArrowIcon />}>Durchsuchen</Button>
-      </CardActions>
-    </Card>
-  );
-
-  const GenresCard: React.FC = () => (
-    <Card sx={{ minWidth: 275 }} elevation={3}>
-      <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Stilrichtungen
-        </Typography>
-        <Typography variant="h5" component="div">
-          <TheaterComedyIcon />&nbsp;Genreverzeichnis
-        </Typography>
-        <Typography variant="body2">
-          Eine Auflistung aller Genres.
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small" startIcon={<RightArrowIcon />}>Durchsuchen</Button>
-      </CardActions>
-    </Card>
-  );
-
   return (
     <LandingLayout>
       <Box sx={{ pt: { md: theme.spacing(4), lg: theme.spacing(8) }, width: '100%', mx: 'auto' }}>
@@ -80,12 +78,12 @@ export const LandingPage: React.FC = () => {
             <Typography variant="h1">
               Erzgebirgsmusik
             </Typography>
-            <Typography variant="h3" sx={{ mb: theme.spacing(2) }}>
+            <Typography variant="h2" sx={{ mb: theme.spacing(2) }}>
               Liederarchiv
             </Typography>
           </Box>
         </Stack>
-        <Typography variant="h6" sx={{ mb: theme.spacing(4) }}>
+        <Typography variant="body1" sx={{ mb: theme.spacing(4) }}>
           Hier im Erzgebirgs-Musikarchiv finden Sie volkstümliche Lieder zum Stöbern, Anhören und Musizieren.
           Lorem ipsum dolor sit amet consectetur, adipisicing elit. Recusandae quos eligendi, excepturi facere ullam cum dicta hic iste voluptates quam temporibus sunt earum deleniti! Quia enim aliquid excepturi corporis alias.
         </Typography>

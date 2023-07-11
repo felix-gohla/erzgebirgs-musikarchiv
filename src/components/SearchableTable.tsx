@@ -1,6 +1,7 @@
 import FilterListIcon from '@mui/icons-material/FilterList';
 import {
   Box,
+  BoxProps,
   Checkbox,
   IconButton,
   Paper,
@@ -128,9 +129,14 @@ type Column<T> = SortableColumn<T> & {
   align?: TableCellProps['align'],
 
   /**
-   * A table column width.
+   * A table column minimum width.
    */
-  width?: TableCellProps['width'],
+  minWidth?: string | number,
+
+  /**
+   * A table column maximum width.
+   */
+  maxWidth?: string | number,
 }
 
 interface EnhancedTableProps<T> {
@@ -182,7 +188,7 @@ const EnhancedTableHead = <T,>(props: EnhancedTableProps<T>) => {
             align={headCell.align}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
-            width={headCell.width}
+            sx={{ minWidth: headCell.minWidth, maxWidth: headCell.maxWidth }}
           >
             { headCell.sortable
               ? (
@@ -219,12 +225,13 @@ type SearchableTableProps<T extends TypeWithId> = {
   defaultOrder: keyof T & string,
   tableTitle?: string,
   subtitle?: string,
+  sx?: BoxProps<'div'>['sx'],
 } & ({
   enableSelection: false,
-  onClick?: (event: React.MouseEvent, row: T['id']) => void | Promise<void>,
+  onClick?: (event: React.MouseEvent, id: T['id']) => void | Promise<void>,
 } | {
   enableSelection: true,
-  onSelect?: (rows: readonly T['id'][]) => void | Promise<void>,
+  onSelect?: (ids: readonly T['id'][]) => void | Promise<void>,
 })
 
 export const SearchableTable = <T extends TypeWithId,>(props: SearchableTableProps<T>) => {
@@ -235,6 +242,7 @@ export const SearchableTable = <T extends TypeWithId,>(props: SearchableTablePro
     tableTitle,
     enableSelection = false,
     subtitle,
+    sx,
   } = props;
 
   const theme = useTheme();
@@ -327,7 +335,7 @@ export const SearchableTable = <T extends TypeWithId,>(props: SearchableTablePro
   );
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box component='div' sx={{ width: '100%', ...sx }}>
       <Paper sx={{ width: '100%', mb: 2 }} elevation={3}>
         <EnhancedTableToolbar title={tableTitle} subtitle={subtitle} numSelected={selected.length} />
         <TableContainer>
@@ -375,21 +383,25 @@ export const SearchableTable = <T extends TypeWithId,>(props: SearchableTablePro
                     )}
                     {
                       columns.map((column) => {
+                        const sx: TableCellProps['sx'] = {
+                          minWidth: column.minWidth,
+                          maxWidth: column.maxWidth,
+                        };
                         if (column.renderRow) {
                           return (
-                            <TableCell key={column.id} align={column.align || 'left'}>{column.renderRow(row, index)}</TableCell>
+                            <TableCell sx={sx} key={column.id} align={column.align || 'left'}>{column.renderRow(row, index)}</TableCell>
                           );
                         }
                         const value = row[column.id] as { toString?: () => string };
                         if (typeof value?.['toString'] !== 'function') {
                           return (
-                            <TableCell key={column.id} align={column.align || 'left'}>
+                            <TableCell sx={sx} key={column.id} align={column.align || 'left'}>
                               <Typography variant="body2" sx={{ color: theme.palette.error.main }}>Cannot render...</Typography>
                             </TableCell>
                           );
                         }
                         return (
-                          <TableCell key={column.id} align={column.align || 'left'}>{value.toString()}</TableCell>
+                          <TableCell sx={sx} key={column.id} align={column.align || 'left'}>{value.toString()}</TableCell>
                         );
                       })
                     }

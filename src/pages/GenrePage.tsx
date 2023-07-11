@@ -70,14 +70,14 @@ export const GenrePage: React.FC = () => {
               label: 'Titel',
               align: 'left',
               sortable: true,
-              width: '30%',
+              minWidth: '30%',
               comparator: (order, lhs, rhs) => (order === 'asc' ? lhs.title.localeCompare(rhs.title) : rhs.title.localeCompare(lhs.title)),
             },
             {
               id: 'text',
               label: 'Text',
               sortable: false,
-              width: '100%',
+              minWidth: '100%',
               renderRow: (o) => {
                 return (
                   <Typography
