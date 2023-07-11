@@ -1,8 +1,7 @@
 import { Container, useTheme } from '@mui/material';
 
+import { Footer } from '@/components/Footer';
 import { TopMenu } from '@/components/TopMenu';
-
-import { Footer } from '../Footer';
 
 export const MainLayout: React.FC<React.PropsWithChildren<Record<never, never>>> = (props) => {
   const { children } = props;

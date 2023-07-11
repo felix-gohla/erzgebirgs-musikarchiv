@@ -6,6 +6,8 @@ import {
   Routes,
 } from 'react-router-dom';
 
+import { ErrorBoundary } from '@/components/ErrorBoundary';
+
 import { AuthorPage } from './pages/AuthorPage';
 import { GenrePage } from './pages/GenrePage';
 import { LandingPage } from './pages/LandingPage';
@@ -20,22 +22,25 @@ export const App: React.FC = () => {
     [prefersDarkMode],
   );
 
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter>
-        <Routes>
-          <Route
-            path="/"
-            errorElement={<div>Error</div>}
-          >
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/songs/:id" element={<SongPage />} />
-            <Route path="/songs/" element={<SongListPage />} />
-            <Route path="/authors/:id" element={<AuthorPage />} />
-            <Route path="/genres/:id" element={<GenrePage />} />
-          </Route>
-        </Routes>
+        <ErrorBoundary>
+          <Routes>
+            <Route
+              path="/"
+              errorElement={<div>Error</div>}
+            >
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/songs/:id" element={<SongPage />} />
+              <Route path="/songs/" element={<SongListPage />} />
+              <Route path="/authors/:id" element={<AuthorPage />} />
+              <Route path="/genres/:id" element={<GenrePage />} />
+            </Route>
+          </Routes>
+        </ErrorBoundary>
       </BrowserRouter>
     </ThemeProvider>
   );

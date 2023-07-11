@@ -86,8 +86,8 @@ export const LandingPage: React.FC = () => {
           </Box>
         </Stack>
         <Typography variant="h6" sx={{ mb: theme.spacing(4) }}>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Hic aliquam molestias quibusdam, neque quo suscipit facilis temporibus nemo cumque et accusantium dolorem, culpa fuga esse consequatur aperiam. Dolorem, cupiditate? Pariatur?
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Est repellat aut provident nesciunt illo hic ad laborum quis, recusandae eligendi. Sequi magnam aspernatur ad unde consequatur? Tenetur eius quis modi.
+          Hier im Erzgebirgs-Musikarchiv finden Sie volkstümliche Lieder zum Stöbern, Anhören und Musizieren.
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Recusandae quos eligendi, excepturi facere ullam cum dicta hic iste voluptates quam temporibus sunt earum deleniti! Quia enim aliquid excepturi corporis alias.
         </Typography>
         <DatabaseSearchField label="Suchen…" />
       </Box>
