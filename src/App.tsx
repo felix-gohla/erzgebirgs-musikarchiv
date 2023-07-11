@@ -22,7 +22,6 @@ export const App: React.FC = () => {
     [prefersDarkMode],
   );
 
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
