@@ -1,10 +1,10 @@
-import { Group as GroupIcon, MusicNote as MusicNoteIcon } from '@mui/icons-material';
+import { Group as GroupIcon, MusicNote as MusicNoteIcon, TheaterComedy as TheaterIcon } from '@mui/icons-material';
 import { darken, lighten, styled,Typography } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { findAuthors, findSongs } from '@/services';
-import { Author, Song } from '@/types';
+import { findAuthors, findGenres, findSongs } from '@/services';
+import { Author, Genre, Song } from '@/types';
 
 import { SearchField, SearchFieldProps } from './SearchField';
 
@@ -14,6 +14,9 @@ type AllEntities = {
 } | {
   type: 'song',
   data: Song,
+} | {
+  type: 'genre',
+  data: Genre,
 }
 
 type SongSearchFieldProps = Partial<SearchFieldProps<AllEntities>>;
@@ -41,7 +44,7 @@ export const DatabaseSearchField: React.FC<SongSearchFieldProps> = (props) => {
     label='Suchen…'
     {...props}
     fetchOptions={async (searchTerm): Promise<AllEntities[]> => {
-      const [songs, authors] = await Promise.all([
+      const [songs, authors, genres] = await Promise.all([
         findSongs({
           filter: searchTerm !== '' ? { '_or': [
             { title: { '_icontains': searchTerm } },
@@ -49,9 +52,13 @@ export const DatabaseSearchField: React.FC<SongSearchFieldProps> = (props) => {
             { authors: { authors_id: { name: { '_icontains': searchTerm } } } },
             { genres: { genres_id: { name: { '_icontains': searchTerm } } } },
           ] } : {},
-          limit: 100,
+          limit: 25,
         }),
         findAuthors({
+          filter: searchTerm !== '' ? { name: { '_icontains': searchTerm } } : {},
+          sort: ['name'],
+        }),
+        findGenres({
           filter: searchTerm !== '' ? { name: { '_icontains': searchTerm } } : {},
           sort: ['name'],
         }),
@@ -59,6 +66,7 @@ export const DatabaseSearchField: React.FC<SongSearchFieldProps> = (props) => {
       return [
         ...songs.map((song) => ({ type: 'song' as const, data: song })),
         ...authors.map((author) => ({ type: 'author' as const, data: author })),
+        ...genres.map((genre) => ({ type: 'genre' as const, data: genre })),
       ];
     }}
     groupBy={(entity) => entity.type}
@@ -66,9 +74,10 @@ export const DatabaseSearchField: React.FC<SongSearchFieldProps> = (props) => {
       let title: React.ReactNode = null;
       if (params.group === 'author') {
         title = <Typography><GroupIcon sx={{ verticalAlign: 'middle' }} />&nbsp;Autoren</Typography>;
-      }
-      else if (params.group === 'song') {
+      } else if (params.group === 'song') {
         title = <Typography><MusicNoteIcon sx={{ verticalAlign: 'middle' }} />&nbsp;Lieder</Typography>;
+      } else if (params.group === 'genre') {
+        title = <Typography><TheaterIcon sx={{ verticalAlign: 'middle' }} />&nbsp;Genres</Typography>;
       }
       return (
         <li key={params.key}>
@@ -83,9 +92,10 @@ export const DatabaseSearchField: React.FC<SongSearchFieldProps> = (props) => {
       }
       if (value.type === 'song') {
         navigate(`/songs/${value.data.id}`);
-      }
-      if (value.type === 'author') {
+      } else if (value.type === 'author') {
         navigate(`/authors/${value.data.id}`);
+      } else if (value.type === 'genre') {
+        navigate(`/genres/${value.data.id}`);
       }
     }}
     getOptionLabel={(entity: AllEntities | string): string => {
@@ -96,6 +106,9 @@ export const DatabaseSearchField: React.FC<SongSearchFieldProps> = (props) => {
         return entity.data.title;
       }
       if (entity.type === 'author') {
+        return entity.data.name;
+      }
+      if (entity.type === 'genre') {
         return entity.data.name;
       }
       return 'Unbekannter Fehler';
