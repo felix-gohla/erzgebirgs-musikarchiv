@@ -1,5 +1,4 @@
-import { FileItem, FilterOperators, QueryMany } from '@directus/sdk';
-import { Directus } from '@directus/sdk';
+import { Directus, FileItem, FilterOperators, QueryMany } from '@directus/sdk';
 
 import { Author, AuthorRelation, Genre, GenreRelation, Song } from '@/types';
 
@@ -11,11 +10,22 @@ type MusikDbCms = {
 
 export const DIRECTUS_BASE_URL = import.meta.env.VITE_CMS_API_URL;
 
-export const assetUrlFromFileId = (fileId: string, options?: { download?: boolean, downloadFilename?: string }) => {
-  const { download = false, downloadFilename } = options || {};
+export const assetUrlFromFileId = (fileId: string, options?: { download?: boolean, downloadFilename?: string, width?: number, height?: number, quality?: number }) => {
+  const { download = false, downloadFilename, width, height, quality } = options || {};
   const url = new URL(`/assets/${fileId}`, DIRECTUS_BASE_URL);
   if (download) {
     url.searchParams.set('download', 'true');
+  }
+  url.searchParams.set('withoutEnlargement', 'true');
+  url.searchParams.set('format', 'auto');
+  if (width) {
+    url.searchParams.set('width', width.toString());
+  }
+  if (height) {
+    url.searchParams.set('height', height.toString());
+  }
+  if (quality) {
+    url.searchParams.set('quality', quality.toString());
   }
   if (downloadFilename) {
     url.pathname += `/${downloadFilename}`;
