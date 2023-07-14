@@ -46,6 +46,7 @@ export const SongListPage: React.FC = () => {
             id: 'preview_image',
             align: 'center',
             sortable: false,
+            maxWidth: '128px',
             label: 'Vorschaubild',
             renderRow: (song) => song.preview_image ? <DirectusImage fileId={song.preview_image} thumbnail={{ height: 32, quality: 75 }} height={32} /> : null,
           },
@@ -53,8 +54,10 @@ export const SongListPage: React.FC = () => {
             id: 'title',
             align: 'left',
             sortable: true,
+            minWidth: 'fit-content',
             comparator: (order, lhs, rhs) => order === 'asc' ? lhs.title.localeCompare(rhs.title) : rhs.title.localeCompare(lhs.title),
             label: 'Titel',
+            renderRow: (o) => <Typography variant="body2" whiteSpace="nowrap">{ o.title }</Typography>,
           },
           {
             id: 'text',
@@ -70,13 +73,25 @@ export const SongListPage: React.FC = () => {
             ),
           },
           {
+            id: 'genres',
+            align: 'left',
+            sortable: false,
+            label: 'Genres',
+            maxWidth: '250px',
+            renderRow: (song) => (
+              <Stack direction="row" spacing={1} sx={{ mb: theme.spacing(1), overflowX: 'scroll' }} useFlexGap>
+                { song.genres.map((genre) => (<Chip size='small' key={genre.genres_id.id} label={genre.genres_id.name} />)) }
+              </Stack>
+            ),
+          },
+          {
             id: 'authors',
             align: 'left',
             sortable: false,
             label: 'Autoren',
             maxWidth: '250px',
             renderRow: (song) => (
-              <Stack direction="row" spacing={1} sx={{ mb: theme.spacing(1), overflowX: 'scroll' }}>
+              <Stack direction="row" spacing={1} sx={{ mb: theme.spacing(1), overflowX: 'scroll' }} useFlexGap>
                 { song.authors.map((author) => (<Chip size='small' key={author.authors_id.id} label={author.authors_id.name} />)) }
               </Stack>
             ),
