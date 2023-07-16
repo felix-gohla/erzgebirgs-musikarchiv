@@ -27,7 +27,7 @@ export type FetchingHook<T> = {
 
 export const useBaseFetchHook = <T>(fetcher: () => Promise<T>, enabled: boolean): FetchingHook<T> => {
   const [data, setData] = React.useState<T | undefined>(undefined);
-  const [isFetching, setIsFetching] = React.useState(false);
+  const [isFetching, setIsFetching] = React.useState(true);
   const [error, setError] = React.useState<Error | undefined>(undefined);
 
   React.useEffect(() => {
