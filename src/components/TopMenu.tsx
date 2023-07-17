@@ -1,7 +1,9 @@
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import { AppBar, Box, Button, IconButton, Toolbar, Tooltip, useTheme } from '@mui/material';
 import React from 'react';
+
+import { useIsDesktop, useThemeMode } from '@/hooks';
 
 import { DatabaseSearchField } from './DatabaseSearchField';
 import { Logo } from './Logo';
@@ -11,6 +13,18 @@ interface TopMenuProps {
 
 export const TopMenu: React.FC<TopMenuProps> = (props) => {
   const { showSearchBar = false } = props;
+
+  const theme = useTheme();
+  const { themeMode, setThemeMode } = useThemeMode();
+
+  const desktop = useIsDesktop();
+
+  const handleThemeChange = React.useCallback(() => {
+    setThemeMode(themeMode === 'light' ? 'dark' : 'light');
+  }, [themeMode, setThemeMode]);
+
+  const themeModeIcon = themeMode === 'light' ? <LightModeIcon /> : <DarkModeIcon />;
+  const themeModeString = themeMode === 'light' ? 'Heller Modus' : 'Dunkler Modus';
 
   return (
     <AppBar position="sticky">
@@ -32,6 +46,19 @@ export const TopMenu: React.FC<TopMenuProps> = (props) => {
               <Box sx={{ flexGrow: 1, display: { 'sm': 'none', 'md': 'initial' } }} />
             </>
           )
+        }
+        { desktop
+          ? <Button
+            sx={{ color: 'inherit', whiteSpace: 'nowrap', ml: theme.spacing(1) }}
+            aria-labelledby="theme-mode-label"
+            onClick={handleThemeChange}
+            endIcon={themeModeIcon}
+          >
+            { themeModeString }
+          </Button>
+          : <Tooltip title={themeModeString}>
+            <IconButton onClick={handleThemeChange} sx={{ color: 'inherit', ml: theme.spacing(1) }}>{ themeModeIcon }</IconButton>
+          </Tooltip>
         }
       </Toolbar>
     </AppBar>

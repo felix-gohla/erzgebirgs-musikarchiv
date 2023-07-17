@@ -1,4 +1,3 @@
-import { CssBaseline, ThemeProvider, useMediaQuery } from '@mui/material';
 import React from 'react';
 import {
   BrowserRouter,
@@ -6,25 +5,17 @@ import {
   Routes,
 } from 'react-router-dom';
 
-import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { ErrorBoundary, ThemeProvider } from '@/components';
 
 import { AuthorPage } from './pages/AuthorPage';
 import { GenrePage } from './pages/GenrePage';
 import { LandingPage } from './pages/LandingPage';
 import { SongListPage } from './pages/SongListPage';
 import { SongPage } from './pages/SongPage';
-import { generateTheme } from './theme';
 
 export const App: React.FC = () => {
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  const theme = React.useMemo(
-    () => generateTheme(prefersDarkMode),
-    [prefersDarkMode],
-  );
-
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <ThemeProvider>
       <BrowserRouter>
         <ErrorBoundary>
           <Routes>
