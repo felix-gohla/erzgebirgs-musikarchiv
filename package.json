@@ -25,6 +25,7 @@
     "sort-by": "^1.2.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.0.2",
     "@types/deep-equal": "^1.0.1",
     "@types/dompurify": "^3.0.2",
     "@types/node": "^18",
