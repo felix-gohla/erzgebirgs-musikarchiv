@@ -1,8 +1,7 @@
 import { QueryMany } from '@directus/sdk';
 import React from 'react';
 
-import { findSongById, findSongs, findSonsByAuthorId } from '@/services';
-import { findSonsByGenreId } from '@/services/directus';
+import { countSongs,findSongById, findSongs, findSongsByAuthorId, findSongsByGenreId } from '@/services';
 import { type Author, Genre, type Song } from '@/types';
 
 import { useDeepCompareMemoize } from './deepCompareMemoize';
@@ -21,12 +20,18 @@ export const useGetSongById = (id: Song['id'], enabled = true): FetchingHook<Son
 
 export const useGetSongsByAuthorId = (authorId: Author['id'], options?: QueryMany<Song>, enabled = true): FetchingHook<Song[]> => {
   const memoizedOptions = useDeepCompareMemoize(options);
-  const fetcher = React.useCallback(() => findSonsByAuthorId(authorId, memoizedOptions), [authorId, memoizedOptions]);
+  const fetcher = React.useCallback(() => findSongsByAuthorId(authorId, memoizedOptions), [authorId, memoizedOptions]);
   return useBaseFetchHook(fetcher, enabled);
 };
 
 export const useGetSongsByGenreId = (genreId: Genre['id'], options?: QueryMany<Song>, enabled = true): FetchingHook<Song[]> => {
   const memoizedOptions = useDeepCompareMemoize(options);
-  const fetcher = React.useCallback(() => findSonsByGenreId(genreId, memoizedOptions), [genreId, memoizedOptions]);
+  const fetcher = React.useCallback(() => findSongsByGenreId(genreId, memoizedOptions), [genreId, memoizedOptions]);
+  return useBaseFetchHook(fetcher, enabled);
+};
+
+export const useCountSongs = (filter: QueryMany<Song>['filter'] = undefined, enabled = true) => {
+  const memoizedFilter = useDeepCompareMemoize(filter);
+  const fetcher = React.useCallback(() => countSongs(memoizedFilter), [memoizedFilter]);
   return useBaseFetchHook(fetcher, enabled);
 };

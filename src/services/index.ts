@@ -1,5 +1,6 @@
 export {
   assetUrlFromFileId,
+  countSongs,
   type File,
   findAuthorById,
   findAuthors,
@@ -7,7 +8,8 @@ export {
   findGenres,
   findSongById,
   findSongs,
-  findSongsByAuthorId as findSonsByAuthorId,
+  findSongsByAuthorId,
+  findSongsByGenreId,
   getFile,
   getImage,
   type Image,

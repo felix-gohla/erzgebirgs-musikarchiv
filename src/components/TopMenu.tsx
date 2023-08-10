@@ -39,13 +39,15 @@ export const TopMenu: React.FC<TopMenuProps> = (props) => {
           width={{ xs: 128, sm: 192 }}
         />
         {
-          showSearchBar && (
-            <>
-              <Box sx={{ flexGrow: 1, height: '100%' }} />
-              <DatabaseSearchField variant="growing" />
-              <Box sx={{ flexGrow: 1, display: { 'sm': 'none', 'md': 'initial' } }} />
-            </>
-          )
+          showSearchBar
+            ? (
+              <>
+                <Box sx={{ flexGrow: 1, height: '100%' }} />
+                <DatabaseSearchField variant="growing" />
+                <Box sx={{ flexGrow: 1, display: { 'sm': 'none', 'md': 'initial' } }} />
+              </>
+            )
+            : <Box sx={{ flex: 1 }} />
         }
         { desktop
           ? <Button

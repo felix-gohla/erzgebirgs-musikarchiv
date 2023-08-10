@@ -49,6 +49,15 @@ export const findSongs = async (options?: QueryMany<Song>): Promise<Song[]> => {
   return songs.data || [];
 };
 
+export const countSongs = async (filter: QueryMany<Song>['filter']): Promise<number> => {
+  const cnt = await directus.items('songs').readByQuery({
+    fields:[],
+    filter,
+    meta: 'total_count',
+  });
+  return cnt.meta?.total_count || 0;
+};
+
 export const findSongById = async (id: Song['id']): Promise<Song | null | undefined> => directus.items('songs')
   .readOne(
     id,
@@ -68,7 +77,7 @@ export const findSongsByAuthorId = async (authorId: Author['id'], options?: Quer
   return songs.data || [];
 };
 
-export const findSonsByGenreId = async (genreId: Genre['id'], options?: QueryMany<Song>): Promise<Song[]> => {
+export const findSongsByGenreId = async (genreId: Genre['id'], options?: QueryMany<Song>): Promise<Song[]> => {
   const songs = await directus.items('songs')
     .readByQuery({
       ...options,

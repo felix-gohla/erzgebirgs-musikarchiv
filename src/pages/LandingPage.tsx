@@ -85,7 +85,7 @@ export const LandingPage: React.FC = () => {
         </Stack>
         <Typography variant="body1" sx={{ mb: theme.spacing(4) }}>
           Hier im Erzgebirgs-Musikarchiv finden Sie volkstümliche Lieder zum Stöbern, Anhören und Musizieren.
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Recusandae quos eligendi, excepturi facere ullam cum dicta hic iste voluptates quam temporibus sunt earum deleniti! Quia enim aliquid excepturi corporis alias.
+          Hier folgt noch Beschreibungstext.
         </Typography>
         <DatabaseSearchField label="Suchen…" />
       </Box>

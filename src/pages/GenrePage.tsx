@@ -3,8 +3,9 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { DirectusImage, Loader, MainLayout } from '@/components';
-import { SearchableTable } from '@/components/SearchableTable';
+import { ColumnDefinition, SearchableTable } from '@/components/SearchableTable';
 import { useGetGenreById, useGetSongsByGenreId } from '@/hooks';
+import { Song } from '@/types';
 import { DOMPurify } from '@/utils';
 
 export const GenrePage: React.FC = () => {
@@ -52,29 +53,27 @@ export const GenrePage: React.FC = () => {
 
       <Box>
         <SearchableTable
-          tableTitle='Lieder'
+          title='Lieder'
           subtitle={`Folgende Lieder wurden für ${genre.name} gefunden:`}
-          data={songs || []}
+          loadData={async () => songs || []}
+          totalRowCount={songs?.length || 0}
           enableSelection={false}
           onClick={(_event, songId) => { navigate(`/songs/${songId}`); }}
-          columns={[
-            {
-              id: 'preview_image',
+          columns={{
+            preview_image: {
               label: 'Vorschaubild',
               align: 'center',
               sortable: false,
               renderRow: (o) => o.preview_image && (<DirectusImage fileId={o.preview_image} height={53} style={{ maxWidth: 53 }} />),
             },
-            {
-              id: 'title',
+            title: {
               label: 'Titel',
               align: 'left',
               sortable: true,
               minWidth: '30%',
               comparator: (order, lhs, rhs) => (order === 'asc' ? lhs.title.localeCompare(rhs.title) : rhs.title.localeCompare(lhs.title)),
             },
-            {
-              id: 'text',
+            text: {
               label: 'Text',
               sortable: false,
               minWidth: '100%',
@@ -89,7 +88,7 @@ export const GenrePage: React.FC = () => {
                 );
               },
             },
-          ]}
+          } satisfies ColumnDefinition<Song>}
           defaultOrder="title"
         />
       </Box>

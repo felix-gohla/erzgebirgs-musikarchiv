@@ -46,23 +46,23 @@ export const SongPage: React.FC = () => {
 
   return (
     <MainLayout>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} sx={{ maxWidth: '100%' }}>
         <Grid item xs={12} lg={song.preview_image ? 8 : 12}>
           <Typography variant='h1'>
             { song.title }
           </Typography>
-          <Stack direction="row" spacing={1} sx={{ mb: theme.spacing(1) }}>
-            { genres.map((genre) => (<Chip label={genre.name} key={genre.id} clickable component={Link} to={`/genres/${genre.id}`} />)) }
+          <Stack direction="row" spacing={1} sx={{ mb: theme.spacing(1) }} flexWrap="wrap" useFlexGap>
+            { genres.map((genre) => (<Chip size="small" label={genre.name} key={genre.id} clickable component={Link} to={`/genres/${genre.id}`} />)) }
           </Stack>
-          <Stack direction="row" spacing={1}>
-            { authors.map((author) => (<Chip label={author.name} key={author.id} clickable component={Link} to={`/authors/${author.id}`} />)) }
+          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+            { authors.map((author) => (<Chip size="small" label={author.name} key={author.id} clickable component={Link} to={`/authors/${author.id}`} />)) }
           </Stack>
         </Grid>
         { song.preview_image && (
           <Grid item xs={12} lg={4} sx={{ display: 'flex', justifyContent: 'center' }}>
             <DirectusImage
               fileId={song.preview_image}
-              style={{ maxHeight: 384 }}
+              style={{ maxHeight: 384, maxWidth: '100%' }}
             />
           </Grid>
         )}
