@@ -22,7 +22,8 @@
     "baseUrl": "./src",
     "paths": {
       "@/*": ["./*"]
-    }
+    },
+    "noErrorTruncation": true,
   },
   "include": ["src", ".eslintrc.js"],
   "references": [{ "path": "./tsconfig.node.json" }]
