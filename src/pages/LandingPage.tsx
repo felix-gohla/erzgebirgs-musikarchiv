@@ -60,7 +60,7 @@ const GenresCard: React.FC = () => (
       </Typography>
     </CardContent>
     <CardActions>
-      <Button size="small" startIcon={<RightArrowIcon />}>Durchsuchen</Button>
+      <Button component={Link} to={'/genres/'} size="small" startIcon={<RightArrowIcon />}>Durchsuchen</Button>
     </CardActions>
   </Card>
 );

@@ -1,7 +1,7 @@
 import { QueryMany } from '@directus/sdk';
 import React from 'react';
 
-import { findGenreById, findGenres } from '@/services';
+import { countGenres, findGenreById, findGenres } from '@/services';
 import { Genre } from '@/types';
 
 import { useDeepCompareMemoize } from './deepCompareMemoize';
@@ -15,5 +15,11 @@ export const useGetGenres = (options?: QueryMany<Genre>, enabled = true): Fetchi
 
 export const useGetGenreById = (id: Genre['id'], enabled = true): FetchingHook<Genre | null | undefined> => {
   const fetcher = React.useCallback(() => findGenreById(id), [id]);
+  return useBaseFetchHook(fetcher, enabled);
+};
+
+export const useCountGenres = (filter: QueryMany<Genre>['filter'] = undefined, enabled = true) => {
+  const memoizedFilter = useDeepCompareMemoize(filter);
+  const fetcher = React.useCallback(() => countGenres(memoizedFilter), [memoizedFilter]);
   return useBaseFetchHook(fetcher, enabled);
 };

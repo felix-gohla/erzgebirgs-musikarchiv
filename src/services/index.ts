@@ -1,5 +1,6 @@
 export {
   assetUrlFromFileId,
+  countGenres,
   countSongs,
   type File,
   findAuthorById,

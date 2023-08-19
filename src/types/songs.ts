@@ -1,5 +1,5 @@
-import { AuthorRelation } from './authors';
-import { GenreRelation } from './genres';
+import { type AuthorRelation } from './authors';
+import { type GenreRelation } from './genres';
 
 /**
  * A song.
@@ -47,4 +47,9 @@ export interface Song {
      * The genres that are linked to this song.
      */
     genres: GenreRelation[];
+}
+
+export interface SongRelation {
+    id: number;
+    songs_id: Song
 }

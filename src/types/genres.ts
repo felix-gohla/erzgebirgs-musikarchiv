@@ -18,6 +18,10 @@ export interface Genre {
      * The genre's name.
      */
     name: string;
+    /**
+     * The number of songs for this genre.
+     */
+    songs_count: number;
 }
 
 export interface GenreRelation {

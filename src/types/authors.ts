@@ -27,9 +27,9 @@ export interface Author {
      */
     description: string | null;
     /**
-     * The number of songs associated with the author.
+     * The number of songs for this author.
      */
-    song_count: number;
+    songs_count: number;
 }
 
 export interface AuthorRelation {
