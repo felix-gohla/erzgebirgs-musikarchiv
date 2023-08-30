@@ -1,5 +1,6 @@
-import { List, ListItem, ListItemText, Typography,useTheme } from '@mui/material';
+import { Link as MuiLink,List, ListItem, ListItemText, Typography, useTheme } from '@mui/material';
 import React from 'react';
+import { createSearchParams,Link } from 'react-router-dom';
 
 import { Loader, MainLayout } from '@/components';
 import { useGetGenres } from '@/hooks';
@@ -33,19 +34,24 @@ export const GenresListPage: React.FC = () => {
       </Typography>
       <List>
         {
-          genres.map((genre) => (
-            <ListItem
-              dense
-              disablePadding
-              key={`genre-${genre.id}`}
-            >
-              <ListItemText>
-                { genre.name }
-                {' '}
+          genres.map((genre) => {
+            const genreFilter = createSearchParams({filter: JSON.stringify({ genres: [genre.id] })});
+            return (
+              <ListItem
+                dense
+                disablePadding
+                key={`genre-${genre.id}`}
+              >
+                <MuiLink component={Link} to={{ pathname: '/songs', search: `?${genreFilter}` }}>
+                  <ListItemText>
+                    { genre.name }
+                    {' '}
                 ({ genre.songs_count } { genre.songs_count !== 1 ? 'Lieder' : 'Lied' })
-              </ListItemText>
-            </ListItem>
-          ))
+                  </ListItemText>
+                </MuiLink>
+              </ListItem>
+            );
+          })
         }
       </List>
     </MainLayout>
