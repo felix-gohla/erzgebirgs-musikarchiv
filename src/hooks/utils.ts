@@ -3,7 +3,7 @@ import React from 'react';
 /**
  * The return value of a data fetching hook.
  */
-export type FetchingHook<T> = {
+export type FetchingHook<T, O = never> = {
     /**
     * Whether the data is currently fetching.
     */
@@ -23,50 +23,56 @@ export type FetchingHook<T> = {
      * Whether the query is currently enabled.
      */
     enabled: boolean,
+
+    refetch: (options?: O) => Promise<T | undefined>
 }
 
-export const useBaseFetchHook = <T>(fetcher: () => Promise<T>, enabled: boolean): FetchingHook<T> => {
+export const useBaseFetchHook = <T, O>(fetcher: (options?: O) => Promise<T>, options?: O, enabled?: boolean): FetchingHook<T, O> => {
   const [data, setData] = React.useState<T | undefined>(undefined);
   const [isFetching, setIsFetching] = React.useState(true);
   const [error, setError] = React.useState<Error | undefined>(undefined);
 
+  const refetch = React.useCallback(async (options?: O) => {
+    setError(undefined);
+    if (!(enabled ?? true)) {
+      setIsFetching(false);
+      setData(undefined);
+      return;
+    }
+    setIsFetching(true);
+    try {
+      const fetchedData = await fetcher(options);
+      setData(fetchedData);
+      return fetchedData;
+    } finally {
+      setIsFetching(false);
+    }
+  }, [enabled, fetcher]);
+
   React.useEffect(() => {
     let active = true;
 
-    (async () => {
-      setError(undefined);
-      if (!enabled) {
-        setIsFetching(false);
-        setData(undefined);
-        return;
-      }
-      setIsFetching(true);
-      try {
-        const fetchedData = await fetcher();
-        setData(fetchedData);
-      } catch (ex) {
-        if (active) {
-          if (ex instanceof Error) {
-            setError(ex);
-          } else {
-            setError(new Error('Unbekannter Fehler beim Laden der Lieder.'));
-          }
+    refetch(options).catch((ex) => {
+      if (active) {
+        if (ex instanceof Error) {
+          setError(ex);
+        } else {
+          setError(new Error('Unbekannter Fehler bei der Anfrage.'));
         }
-      } finally {
-        setIsFetching(false);
       }
-    })();
+    });
 
     return () => {
       active = false;
       setIsFetching(false);
     };
-  }, [fetcher, enabled]);
+  }, [refetch, options]);
 
   return {
     data: data,
     isLoading: isFetching,
     error,
-    enabled,
+    enabled: enabled ?? true,
+    refetch,
   };
 };

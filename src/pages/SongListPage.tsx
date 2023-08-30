@@ -1,10 +1,10 @@
 import { Chip, Stack, Typography,useTheme } from '@mui/material';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { AudioDownloadButton, DirectusImage, Loader, MainLayout, PdfDownloadButton } from '@/components';
-import { ColumnDefinition, type FilterModelFromColumnDefinition, SearchableTable } from '@/components/SearchableTable';
-import { useCountSongs, useGetSongs } from '@/hooks';
+import { type ColumnDefinition, type FilterModelFromColumnDefinition, LoadDataCallback,SearchableTable } from '@/components/SearchableTable';
+import { useGetSongs } from '@/hooks';
 import { findAuthors, findGenres } from '@/services';
 import { Song } from '@/types';
 import { DOMPurify } from '@/utils';
@@ -110,37 +110,50 @@ const columns = {
     },
   },
 } satisfies ColumnDefinition<Song>;
+Object.freeze(columns);
+
+type SongFilterModel = FilterModelFromColumnDefinition<typeof columns, Song>
+
+const fetchFilterFromModel = (filterModel: SongFilterModel) => {
+  const authorsFilter = Array.from(filterModel?.authors?.filterValue || []);
+  const genresFilter = Array.from(filterModel?.genres?.filterValue || []);
+  const titleFilter = filterModel?.title?.filterValue;
+  const textFilter = filterModel?.text?.filterValue;
+  const shallHavePdf = filterModel?.pdf?.filterValue;
+  const shallHaveAudio = filterModel?.audio?.filterValue;
+  return {
+    authors: authorsFilter.length > 0 ? { authors_id: { id: { '_in': Array.from(authorsFilter) } } } : undefined,
+    genres: genresFilter.length > 0 ? { genres_id: { id: { '_in': Array.from(genresFilter) } } } : undefined,
+    pdf: shallHavePdf ? { '_neq': null } : undefined,
+    audio: shallHaveAudio ? { '_neq': null } : undefined,
+    title: titleFilter ? { '_icontains': titleFilter } : undefined,
+    text: textFilter ? { '_icontains': textFilter } : undefined,
+  };
+};
 
 export const SongListPage: React.FC = () => {
   const theme = useTheme();
 
-  const [filterModel, setFilterModel] = React.useState<FilterModelFromColumnDefinition<typeof columns, Song>>();
+  // const [filterModel, setFilterModel] = React
+  // const [isLoadingSongs, setIsLoadingSongs] = React.useState(false);
+  const { data: songs, error: loadSongsError, isLoading: isLoadingSongs, refetch } = useGetSongs();
 
-  const fetchFilter = React.useMemo(() => {
-    const authorsFilter = Array.from(filterModel?.authors?.filterValue || []);
-    const genresFilter = Array.from(filterModel?.genres?.filterValue || []);
-    const titleFilter = filterModel?.title?.filterValue;
-    const textFilter = filterModel?.text?.filterValue;
-    const shallHavePdf = filterModel?.pdf?.filterValue;
-    const shallHaveAudio = filterModel?.audio?.filterValue;
-    return {
-      authors: authorsFilter.length > 0 ? { authors_id: { id: { '_in': Array.from(authorsFilter) } } } : undefined,
-      genres: genresFilter.length > 0 ? { genres_id: { id: { '_in': Array.from(genresFilter) } } } : undefined,
-      pdf: shallHavePdf ? { '_neq': null } : undefined,
-      audio: shallHaveAudio ? { '_neq': null } : undefined,
-      title: titleFilter ? { '_icontains': titleFilter } : undefined,
-      text: textFilter ? { '_icontains': textFilter } : undefined,
-    };
-  }, [filterModel]);
+  const songCount = songs?.length || 0;
 
-  const { data: songCount } = useCountSongs(fetchFilter);
-  const { data: songs, error: loadSongsError, isLoading: isLoadingSongs } = useGetSongs({
-    filter: fetchFilter,
-  });
+  const loadDataCallback: LoadDataCallback<Song, typeof columns> = useCallback(async (
+    _offset,
+    _idx,
+    _order,
+    _sortation,
+    filter,
+  ) => await refetch({ filter: fetchFilterFromModel(filter) }) || [], [refetch]);
 
   const navigate = useNavigate();
 
   const isLoading = isLoadingSongs;
+
+  const tableSx = React.useMemo(() => ({ mt: theme.spacing(4) }), [theme]);
+  const clickCallback = React.useCallback((_event: React.MouseEvent, songId: Song['id']) => { navigate(`/songs/${songId}`); }, [navigate]);
 
   if (!songs && isLoading) {
     return (
@@ -165,16 +178,15 @@ export const SongListPage: React.FC = () => {
       <SearchableTable
         title="Alle Lieder"
         totalRowCount={songCount || 10}
-        loadData={async () => new Promise<Song[]>((resolve) => resolve(songs)) }
+        loadData={loadDataCallback}
         defaultOrder='title'
         columns={columns}
         enableSelection={false}
-        sx={{ mt: theme.spacing(4) }}
-        onClick={(_event, songId) => { navigate(`/songs/${songId}`); }}
-        onFilterChange={setFilterModel}
+        sx={tableSx}
+        onClick={clickCallback}
         noDataText='Keine Lieder gefunden'
         isLoading={isLoading}
-        filter={filterModel}
+        useUrlFiltering
       />
     </MainLayout>
   );

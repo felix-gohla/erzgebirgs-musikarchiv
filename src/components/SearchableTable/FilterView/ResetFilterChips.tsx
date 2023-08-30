@@ -67,8 +67,9 @@ export const ResetFilterChips = <F extends FilterModelFromColumnDefinition<CD, T
     if (!onFilterChange || !filter) {
       return;
     }
-    const newFilterModel = {...filter};
+    const newFilterModel = { ...filter };
     for (const key of Object.keys(newFilterModel) as (keyof CD)[]) {
+      newFilterModel[key] = { ...filter[key] };
       delete newFilterModel[key]?.filterValue;
     }
     onFilterChange(newFilterModel);

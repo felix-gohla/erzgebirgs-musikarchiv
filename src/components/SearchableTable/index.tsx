@@ -28,15 +28,15 @@ import { TransitionProps } from '@mui/material/transitions';
 import deepEqual from 'deep-equal';
 import React from 'react';
 
-import { useIsDesktop } from '@/hooks';
+import { useFiltersFromUrl, useIsDesktop } from '@/hooks';
 
 import { FilterView } from './FilterView';
 import { SortableTableHead } from './SortableTableHead';
 import { TableRowsLoadingAnimation } from './TableRowsLoadingAnimation';
 import { TableToolbar } from './TableToolbar';
-import { ColumnDefinition, columnDefinitionToArray, FilterModelFromColumn, FilterModelFromColumnDefinition, Order, TypeWithId } from './types';
+import { ColumnDefinition, columnDefinitionToArray, FilterModelFromColumn, FilterModelFromColumnDefinition, LoadDataCallback, Order, TypeWithId } from './types';
 
-export { type Column, type ColumnDefinition, type FilterModelFromColumnDefinition } from './types';
+export { type Column, type ColumnDefinition, type FilterModelFromColumnDefinition, type LoadDataCallback } from './types';
 
 const FilterDialogTransition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -49,15 +49,16 @@ const FilterDialogTransition = React.forwardRef(function Transition(
 
 type SearchableTableProps<C extends ColumnDefinition<T>, T extends TypeWithId> = {
   totalRowCount: number,
-  loadData: (offset: number, idx: number, order: Order, orderBy: keyof T & string) => Promise<T[]>,
+  loadData: LoadDataCallback<T, C>,
   columns: C,
   defaultOrder: keyof T & string,
   title?: string,
   subtitle?: string,
   sx?: BoxProps<'div'>['sx'],
-  filter?: FilterModelFromColumnDefinition<C, T>,
+  initialFilter?: FilterModelFromColumnDefinition<C, T>,
   onFilterChange?: (filterModel: FilterModelFromColumnDefinition<C, T>) => void | PromiseLike<void>,
   filterChangeDebounce?: number,
+  useUrlFiltering?: boolean,
   noDataText?: string,
   isLoading?: boolean,
 } & ({
@@ -78,9 +79,10 @@ export const SearchableTable = <C extends ColumnDefinition<T>, T extends TypeWit
     subtitle,
     sx,
     totalRowCount,
-    filter,
+    initialFilter,
     onFilterChange,
-    filterChangeDebounce = 250,
+    filterChangeDebounce = 500,
+    useUrlFiltering = false,
     noDataText,
     isLoading: isLoadingOverwrite,
   } = props;
@@ -98,11 +100,11 @@ export const SearchableTable = <C extends ColumnDefinition<T>, T extends TypeWit
   const [rows, setRows] = React.useState<T[]>([]);
   const [isLoadingData, setIsLoadingData] = React.useState(false);
   const isLoading = isLoadingData || isLoadingOverwrite;
-  const loadDataCallback = React.useCallback((offset: number, limit: number, order: Order, orderBy: keyof T & string) => {
+  const loadDataCallback = React.useCallback((offset: number, limit: number, order: Order, orderBy: keyof T & string, filter: FilterModelFromColumnDefinition<C, T>) => {
     let active = true;
     setIsLoadingData(true);
 
-    loadData(offset, limit, order, orderBy).then((fetchedData) => {
+    loadData(offset, limit, order, orderBy, filter).then((fetchedData) => {
       if (active === true) {
         setIsLoadingData(false);
         setRows(fetchedData);
@@ -119,13 +121,6 @@ export const SearchableTable = <C extends ColumnDefinition<T>, T extends TypeWit
   }, [loadData, setIsLoadingData]);
   const numLoadingAnimationRows = Math.min(totalRowCount, rowsPerPage);
 
-  React.useEffect(
-    () => {
-      loadDataCallback(page * rowsPerPage, Math.min(rowsPerPage, totalRowCount), order, orderBy);
-    },
-    [loadDataCallback, page, rowsPerPage, totalRowCount, order, orderBy],
-  );
-
   // Column handling.
   const filterableColumns = React.useMemo(
     () => {
@@ -135,32 +130,89 @@ export const SearchableTable = <C extends ColumnDefinition<T>, T extends TypeWit
     },
     [columns],
   );
+  const { filtersInUrl, setFiltersInUrl, previousFiltersInUrl } = useFiltersFromUrl<T, C>(columns);
+  const getFilterModelFromUrl = React.useCallback((currentFilterModel: FilterModelFromColumnDefinition<C, T>, currentFiltersInUrl: typeof filtersInUrl) => {
+    const newFilterModel = { ...(currentFilterModel || {}) };
+    filterableColumns.forEach(([columnId, column]) => {
+      const filterType = column.filterSettings?.type;
+      if (!filterType) {
+        return;
+      }
+      const filterValueFromUrl = currentFiltersInUrl[columnId];
+      if (filterValueFromUrl !== undefined) {
+        switch (filterType) {
+        case 'boolean':
+          newFilterModel[columnId] = {
+            columnId,
+            filterType,
+            ...(newFilterModel[columnId]),
+            filterValue: !!filterValueFromUrl,
+          } as FilterModelFromColumn<C, T, keyof T & string>;
+          break;
+        case 'text':
+        case 'multi-select':
+          newFilterModel[columnId] = {
+            columnId,
+            filterType,
+            ...(newFilterModel[columnId]),
+            filterValue: filterValueFromUrl,
+          } as FilterModelFromColumn<C, T, keyof T & string>;
+          break;
+        default:
+          break;
+        }
+      }
+    });
+    return newFilterModel;
+  }, [filterableColumns]);
   const [filterModel, setFilterModel] = React.useState<FilterModelFromColumnDefinition<C, T>>(
-    filterableColumns.reduce((acc, [columnId, column]) => {
-      acc[columnId] = { columnId, filterType: column.filterSettings?.type } as FilterModelFromColumn<C, T, keyof T & string>;
-      return acc;
-    }, {} as FilterModelFromColumnDefinition<C, T>),
+    initialFilter || (useUrlFiltering ? getFilterModelFromUrl(initialFilter || {}, filtersInUrl): {}),
   );
+
   const debouncedFilterChangeCallback = React.useMemo(() => {
-    if (!onFilterChange) {
+    return debounce((newFilterModel: FilterModelFromColumnDefinition<C, T>) => {
+      onFilterChange?.(newFilterModel);
+      if (useUrlFiltering) {
+        setFiltersInUrl(newFilterModel);
+      }
+    }, filterChangeDebounce);
+  }, [useUrlFiltering, onFilterChange, filterChangeDebounce, setFiltersInUrl]);
+  const internalFilterChangeCallback: typeof onFilterChange = React.useMemo(() => (newModel) => {
+    if (deepEqual(newModel, filterModel)) {
       return;
     }
-    return debounce(onFilterChange, filterChangeDebounce);
-  }, [onFilterChange, filterChangeDebounce]);
-  const internalFilterChangeCallback = React.useMemo(() => {
-    const f: typeof onFilterChange = (newModel) => {
-      setFilterModel(newModel);
-      debouncedFilterChangeCallback?.(newModel);
-    };
-    return f;
-  }, [debouncedFilterChangeCallback, setFilterModel]);
+    setFilterModel(newModel);
+    debouncedFilterChangeCallback?.(newModel);
+  }, [filterModel, debouncedFilterChangeCallback]);
+
   React.useEffect(() => {
-    if (!filter || deepEqual(filter, filterModel)) {
+    if (!useUrlFiltering) {
       return;
     }
-    setFilterModel(filter);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter, setFilterModel]);
+    if (deepEqual(previousFiltersInUrl, filtersInUrl)) {
+      return;
+    }
+    const newFilterModel = getFilterModelFromUrl(filterModel, filtersInUrl);
+    if (deepEqual(newFilterModel, filterModel)) {
+      return;
+    }
+    setFilterModel(newFilterModel);
+  }, [useUrlFiltering, filterModel, filtersInUrl, getFilterModelFromUrl, previousFiltersInUrl]);
+
+  // Data fetching.
+  React.useEffect(
+    () => {
+      loadDataCallback(
+        page * rowsPerPage,
+        Math.min(rowsPerPage, totalRowCount),
+        order,
+        orderBy,
+        filterModel,
+      );
+    },
+    [loadDataCallback, page, rowsPerPage, totalRowCount, order, orderBy, filterModel],
+  );
+
 
   // Table handlers.
   const handleRequestSort = (
@@ -260,9 +312,12 @@ export const SearchableTable = <C extends ColumnDefinition<T>, T extends TypeWit
     setFilterDialogOpen(false);
   }, []);
 
+  const boxSx = React.useMemo(() => ({ width: '100%', ...sx }), [sx]);
+  const paperSx = React.useMemo(() => ({ mb: 2, flexGrow: 1 }), []);
+
   return (
-    <Box component='div' sx={{ width: '100%', ...sx }}>
-      <Paper sx={{ mb: 2, flexGrow: 1 }} elevation={3}>
+    <Box component='div' sx={boxSx}>
+      <Paper sx={paperSx} elevation={3}>
         <TableToolbar<FilterModelFromColumnDefinition<C, T>, C, T>
           title={tableTitle}
           subtitle={subtitle}
@@ -282,7 +337,7 @@ export const SearchableTable = <C extends ColumnDefinition<T>, T extends TypeWit
                       <Box sx={{ width: '100%', textAlign: 'center', mt: theme.spacing(1), mb: theme.spacing(1) }}>
                         <Typography variant="overline" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} gap={1}>
                           <FilterIcon fontSize='inherit' />
-                    Filter
+                            Filter
                         </Typography>
                       </Box>
                       <FilterView<C, T>
@@ -310,12 +365,12 @@ export const SearchableTable = <C extends ColumnDefinition<T>, T extends TypeWit
                             <CloseIcon />
                           </IconButton>
                           <Typography sx={{ ml: 2 }} variant="h6" component="div">
-                        Filter
+                              Filter
                           </Typography>
                           { isLoading && <CircularProgress sx={{ mx: theme.spacing(2) }} size='1em' /> }
                           <Box sx={{ flex: 1 }} />
                           <Button autoFocus color="inherit" onClick={handleFilterDialogClose}>
-                        Anwenden
+                            Anwenden
                           </Button>
                         </Toolbar>
                         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', py: theme.spacing(1) }}>
@@ -371,7 +426,7 @@ export const SearchableTable = <C extends ColumnDefinition<T>, T extends TypeWit
                       selected={isItemSelected}
                       sx={{ cursor: 'pointer' }}
                     >
-                      {enableSelection && (
+                      { enableSelection && (
                         <TableCell padding="checkbox">
                           <Checkbox
                             color="primary"
@@ -409,7 +464,7 @@ export const SearchableTable = <C extends ColumnDefinition<T>, T extends TypeWit
                     </TableRow>
                   );
                 })}
-                {emptyRows > 0 && (
+                { emptyRows > 0 && (
                   <TableRow
                     sx={{
                       height: 53 * emptyRows,

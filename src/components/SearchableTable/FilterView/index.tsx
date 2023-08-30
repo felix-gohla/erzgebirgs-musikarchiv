@@ -56,50 +56,59 @@ export const FilterView = <C extends ColumnDefinition<T>, T>(props: FilterViewPr
    */
   const setFilterModelBoolean = React.useCallback(
     (columnId: keyof C, newValue: boolean) => {
-      const newFilterModel = {
+      const filterType = filterableColumns.find(([id]) => id === columnId)?.[1].filterSettings?.type;
+      const newFilterModel: FilterModelFromColumnDefinition<C, T> = {
         ...filterModel,
         [columnId]: {
+          columnId,
+          filterType,
           ...(filterModel[columnId]),
           filterValue: newValue,
         },
       };
       onChange?.(newFilterModel);
     },
-    [filterModel, onChange],
+    [filterableColumns, filterModel, onChange],
   );
 
   const setFilterModelMultiValue = React.useCallback(
     (columnId: keyof C, optionId: FilterOption['id'], newValue: boolean) => {
-      const currentSet = filterModel[columnId]?.filterValue as Set<string | number> | undefined ?? new Set();
+      const currentSet = filterModel[columnId]?.filterValue ? new Set(filterModel[columnId]?.filterValue as Set<string | number>) : new Set();
       if (newValue) {
         currentSet.add(optionId);
       } else {
         currentSet.delete(optionId);
       }
+      const filterType = filterableColumns.find(([id]) => id === columnId)?.[1].filterSettings?.type;
       const newFilterModel = {
         ...filterModel,
         [columnId]: {
+          columnId,
+          filterType,
           ...filterModel[columnId],
           filterValue: currentSet.size > 0 ? currentSet : undefined,
         },
       };
       onChange?.(newFilterModel);
     },
-    [filterModel, onChange],
+    [filterableColumns, filterModel, onChange],
   );
 
   const setFilterModelText = React.useCallback(
     (columnId: keyof C, newValue: string) => {
+      const filterType = filterableColumns.find(([id]) => id === columnId)?.[1].filterSettings?.type;
       const newFilterModel = {
         ...filterModel,
         [columnId]: {
+          columnId,
+          filterType,
           ...filterModel[columnId],
           filterValue: newValue.length > 0 ? newValue : undefined,
         },
       };
       onChange?.(newFilterModel);
     },
-    [filterModel, onChange],
+    [filterableColumns, filterModel, onChange],
   );
 
   if (filterableColumns.length < 1) {

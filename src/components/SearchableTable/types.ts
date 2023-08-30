@@ -135,3 +135,19 @@ export type ConditionalFilter<F extends FilterModelFromColumnDefinition<C, T>, C
 export type DistributivePick<T, K extends keyof T> = T extends unknown
   ? Pick<T, K>
   : never;
+
+export type FilterableColumns <T, CD extends ColumnDefinition<T>> = {
+  [K in keyof CD & string]: CD[K] extends Column<T>
+    ? CD[K]['filterSettings'] extends Required<Column<T>>['filterSettings']
+      ? CD[K]['filterSettings']
+      : never
+  : never
+}
+
+export type LoadDataCallback<T, CD extends ColumnDefinition<T>> = (
+  offset: number,
+  idx: number,
+  order: Order,
+  orderBy: keyof T & string,
+  filter: FilterModelFromColumnDefinition<CD, T>
+) => Promise<T[]>
