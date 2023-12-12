@@ -1,5 +1,6 @@
 import { Container, useTheme } from '@mui/material';
 
+import { Footer } from '@/components/Footer';
 import { TopMenu } from '@/components/TopMenu';
 
 export const LandingLayout: React.FC<React.PropsWithChildren<Record<never, never>>> = (props) => {
@@ -16,6 +17,7 @@ export const LandingLayout: React.FC<React.PropsWithChildren<Record<never, never
       >
         { children }
       </Container>
+      <Footer />
     </>
   );
 };
