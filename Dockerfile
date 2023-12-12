@@ -2,12 +2,16 @@
 # Build container
 FROM node:18-alpine as build
 
+# Enable updates for yarn
+RUN corepack enable
+
 # Only copy package information for caching.
 WORKDIR /app
 COPY package.json /app
 COPY yarn.lock /app
+COPY .yarnrc.yml /app
 # Install packages.
-RUN yarn
+RUN yarn install --immutable
 
 # Copy the rest and build the app.
 COPY . /app
