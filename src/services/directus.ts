@@ -1,11 +1,12 @@
 import { Directus, FileItem, FilterOperators, QueryMany } from '@directus/sdk';
 
-import { Author, AuthorRelation, Genre, GenreRelation, Song } from '@/types';
+import { Author, AuthorRelation, Genre, GenreRelation, Song, StaticPage } from '@/types';
 
 type MusikDbCms = {
   songs: Song;
   authors: Author;
   genres: Genre;
+  static_pages: StaticPage;
 }
 
 export const DIRECTUS_BASE_URL = import.meta.env.VITE_CMS_API_URL;
@@ -159,7 +160,6 @@ export const getFile = async (fileId: string): Promise<File | null> => {
   };
 };
 
-
 export type Image = Pick<FileItem, 'id' | 'description' | 'filesize' | 'title' | 'height' | 'width' | 'location'> & { filenameDownload: string };
 
 export const getImage = async (fileId: string): Promise<Image | null> => {
@@ -178,3 +178,23 @@ export const getImage = async (fileId: string): Promise<Image | null> => {
     location: file.location,
   };
 };
+
+export const findStaticPages = async (options?: QueryMany<StaticPage>['filter']): Promise<Pick<StaticPage, 'id' | 'title' | 'visible'>[]> => {
+  const staticPages = (await directus.items('static_pages').readByQuery({
+    ...options,
+    fields: ['id', 'title', 'visible'],
+  })).data || [];
+  return staticPages.map((sp) => ({
+    id: sp.id,
+    title: sp.title,
+    visible: sp.visible,
+  }));
+};
+
+export const findStaticPageById = async (id: StaticPage['id']): Promise<StaticPage | null | undefined> => directus.items('static_pages')
+  .readOne(
+    id,
+    {
+      fields: ['id', 'title', 'date_created', 'date_updated', 'content', 'visible'],
+    },
+  );

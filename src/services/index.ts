@@ -11,7 +11,8 @@ export {
   findSongs,
   findSongsByAuthorId,
   findSongsByGenreId,
+  findStaticPageById,
+  findStaticPages,
   getFile,
   getImage,
-  type Image,
-} from './directus';
+  type Image} from './directus';

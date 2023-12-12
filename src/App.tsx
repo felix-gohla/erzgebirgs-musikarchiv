@@ -13,6 +13,7 @@ import { GenresListPage } from './pages/GenresListPage';
 import { LandingPage } from './pages/LandingPage';
 import { SongListPage } from './pages/SongListPage';
 import { SongPage } from './pages/SongPage';
+import { StaticPagePage } from './pages/StaticPage';
 
 export const App: React.FC = () => {
   return (
@@ -30,6 +31,7 @@ export const App: React.FC = () => {
               <Route path="/authors/:id" element={<AuthorPage />} />
               <Route path="/genres/" element={<GenresListPage />} />
               <Route path="/genres/:id" element={<GenrePage />} />
+              <Route path="/static_page/:id" element={<StaticPagePage />} />
             </Route>
           </Routes>
         </ErrorBoundary>

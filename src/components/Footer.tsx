@@ -1,3 +1,4 @@
+import { useGetStaticPages } from '@/hooks/staticPages';
 import { Box, Container, Link,Paper, Stack, Typography, useTheme } from '@mui/material';
 import React from 'react';
 import { Link as RouterLink, To } from 'react-router-dom';
@@ -20,6 +21,8 @@ const YearText: React.FC = () => {
 export const Footer: React.FC = () => {
   const theme = useTheme();
 
+  const staticPages = useGetStaticPages()
+
   return (
     <Paper
       component="footer"
@@ -30,9 +33,9 @@ export const Footer: React.FC = () => {
       <Container maxWidth="xl">
         <Stack spacing={2} sx={{ justifyContent: 'center' }}>
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 0, sm: 2 }} sx={{ mx: 'auto', width: '100%', justifyContent: 'center', flexWrap: { sm: 'wrap' }, overflow: 'hidden' }}>
-            <FooterLink to="#imprint">Impressum</FooterLink>
-            <FooterLink to="#about">Über das Projekt</FooterLink>
-            <FooterLink to="#gema">GEMA & Copyright</FooterLink>
+            {
+              staticPages.data && staticPages.data.map((page) => <FooterLink key={page.id} to={`/static_page/${page.id}`}>{page.title}</FooterLink>)
+            }
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'block' } }} />
             <Typography variant="body1" sx={{ width: { xs: '100%', sm: 'auto' }, textAlign: 'center' }}>Copyright&nbsp;&copy;&nbsp;<YearText /></Typography>
           </Stack>
