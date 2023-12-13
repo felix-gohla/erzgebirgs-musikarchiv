@@ -62,7 +62,7 @@ export const DirectusImage: React.FC<DirectusImageProps> = ({ fileId, thumbnail 
   return (
     <img
       src={url.toString()}
-      alt={image.description || image.title}
+      alt={image.description || image.title || undefined}
       {...rest}
     />
   );

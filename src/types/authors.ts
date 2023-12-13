@@ -31,8 +31,3 @@ export interface Author {
      */
     songs_count: number;
 }
-
-export interface AuthorRelation {
-    id: number,
-    authors_id: Author,
-}

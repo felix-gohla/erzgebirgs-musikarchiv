@@ -1,9 +1,9 @@
 import { Box, BoxProps } from '@mui/material';
 import { Link } from 'react-router-dom';
 
-import { ReactComponent as LogoNoText } from '@/assets/logo-no-text.svg';
-import { ReactComponent as LogoTextAside } from '@/assets/logo-text-aside.svg';
-import { ReactComponent as LogoTextBelow } from '@/assets/logo-text-below.svg';
+import LogoNoText from '@/assets/logo-no-text.svg?react';
+import LogoTextAside from '@/assets/logo-text-aside.svg?react';
+import LogoTextBelow from '@/assets/logo-text-below.svg?react';
 
 type LogoBaseProps = {
   variant?: 'text-below' | 'text-aside' | 'no-text',

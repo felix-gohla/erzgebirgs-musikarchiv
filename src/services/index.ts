@@ -15,4 +15,7 @@ export {
   findStaticPages,
   getFile,
   getImage,
-  type Image} from './directus';
+  type Image,
+  type QueryFilter,
+  type QueryOptions,
+} from './directus';

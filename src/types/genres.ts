@@ -23,8 +23,3 @@ export interface Genre {
      */
     songs_count: number;
 }
-
-export interface GenreRelation {
-    id: number;
-    genres_id: Genre
-}

@@ -1,3 +1,4 @@
+import { FilterOperators } from '@directus/sdk';
 import { Chip, Stack, Typography,useTheme } from '@mui/material';
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -115,8 +116,8 @@ Object.freeze(columns);
 type SongFilterModel = FilterModelFromColumnDefinition<typeof columns, Song>
 
 const fetchFilterFromModel = (filterModel: SongFilterModel) => {
-  const authorsFilter = Array.from(filterModel?.authors?.filterValue || []);
-  const genresFilter = Array.from(filterModel?.genres?.filterValue || []);
+  const authorsFilter = Array.from(filterModel?.authors?.filterValue || []).filter((i): i is number => typeof i === 'number');
+  const genresFilter = Array.from(filterModel?.genres?.filterValue || []).filter((i): i is number => typeof i === 'number');
   const titleFilter = filterModel?.title?.filterValue;
   const textFilter = filterModel?.text?.filterValue;
   const shallHavePdf = filterModel?.pdf?.filterValue;
@@ -124,10 +125,10 @@ const fetchFilterFromModel = (filterModel: SongFilterModel) => {
   return {
     authors: authorsFilter.length > 0 ? { authors_id: { id: { '_in': Array.from(authorsFilter) } } } : undefined,
     genres: genresFilter.length > 0 ? { genres_id: { id: { '_in': Array.from(genresFilter) } } } : undefined,
-    pdf: shallHavePdf ? { '_neq': null } : undefined,
-    audio: shallHaveAudio ? { '_neq': null } : undefined,
-    title: titleFilter ? { '_icontains': titleFilter } : undefined,
-    text: textFilter ? { '_icontains': textFilter } : undefined,
+    pdf: shallHavePdf ? { '_null': false } : undefined,
+    audio: shallHaveAudio ? { '_null': false } : undefined,
+    title: titleFilter ? { '_icontains': titleFilter } as FilterOperators<string> : undefined,
+    text: textFilter ? { '_icontains': textFilter } as FilterOperators<string> : undefined,
   };
 };
 

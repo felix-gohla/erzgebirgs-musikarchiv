@@ -1,4 +1,4 @@
-export { type Author, type AuthorRelation } from './authors';
-export { type Genre, type GenreRelation } from './genres';
-export { type Song, type SongRelation } from './songs';
+export { type Author } from './authors';
+export { type Genre } from './genres';
+export { type Song, type SongsAuthors, type SongsGenres } from './songs';
 export { type StaticPage } from './staticPage';

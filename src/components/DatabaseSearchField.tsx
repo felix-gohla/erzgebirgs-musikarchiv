@@ -1,10 +1,11 @@
+import { FilterOperators } from '@directus/sdk';
 import { Group as GroupIcon, MusicNote as MusicNoteIcon, TheaterComedy as TheaterIcon } from '@mui/icons-material';
 import { darken, lighten, styled,Typography } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { findAuthors, findGenres, findSongs } from '@/services';
-import { Author, Genre, Song } from '@/types';
+import { type Author, type Genre, type Song } from '@/types';
 
 import { SearchField, SearchFieldProps } from './SearchField';
 
@@ -47,19 +48,19 @@ export const DatabaseSearchField: React.FC<SongSearchFieldProps> = (props) => {
       const [songs, authors, genres] = await Promise.all([
         findSongs({
           filter: searchTerm !== '' ? { '_or': [
-            { title: { '_icontains': searchTerm } },
-            { text: { '_icontains': searchTerm } },
-            { authors: { authors_id: { name: { '_icontains': searchTerm } } } },
-            { genres: { genres_id: { name: { '_icontains': searchTerm } } } },
+            { title: { '_icontains': searchTerm } as FilterOperators<string> },
+            { text: { '_icontains': searchTerm } as FilterOperators<string> },
+            { authors: { authors_id: { name: { '_icontains': searchTerm } as FilterOperators<string> } } },
+            { genres: { genres_id: { name: { '_icontains': searchTerm } as FilterOperators<string> } } },
           ] } : {},
           limit: 25,
         }),
         findAuthors({
-          filter: searchTerm !== '' ? { name: { '_icontains': searchTerm } } : {},
+          filter: searchTerm !== '' ? { name: { '_icontains': searchTerm } as FilterOperators<string>  } : {},
           sort: ['name'],
         }),
         findGenres({
-          filter: searchTerm !== '' ? { name: { '_icontains': searchTerm } } : {},
+          filter: searchTerm !== '' ? { name: { '_icontains': searchTerm } as FilterOperators<string>  } : {},
           sort: ['name'],
         }),
       ]);

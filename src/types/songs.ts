@@ -1,5 +1,5 @@
-import { type AuthorRelation } from './authors';
-import { type GenreRelation } from './genres';
+import { type Author } from './authors';
+import { type Genre } from './genres';
 
 /**
  * A song.
@@ -41,15 +41,23 @@ export interface Song {
     /**
      * The authors that are linked to this song.
      */
-    authors: AuthorRelation[];
+    authors: SongsAuthors[];
 
     /**
      * The genres that are linked to this song.
      */
-    genres: GenreRelation[];
+    genres: SongsGenres[];
 }
 
-export interface SongRelation {
+interface SongRelation {
     id: number;
     songs_id: Song
+}
+
+export interface SongsAuthors extends SongRelation {
+    authors_id: Author,
+}
+
+export interface SongsGenres extends SongRelation {
+    genres_id: Genre,
 }
