@@ -32,7 +32,8 @@ export const DirectusImage: React.FC<DirectusImageProps> = ({ fileId, thumbnail 
       thumbnailHeight = height;
       thumbnailWidth = width;
     }
-    thumbnailQuality = thumbnail.quality || THUMBNAIL_DEFAULT_QUALITY;
+    // Clamp between 1 and 100.
+    thumbnailQuality = Math.max(1, Math.min(100, thumbnail.quality || THUMBNAIL_DEFAULT_QUALITY));
   }
 
   const url = React.useMemo(
