@@ -1,7 +1,8 @@
-import { useGetStaticPages } from '@/hooks/staticPages';
 import { Box, Container, Link,Paper, Stack, Typography, useTheme } from '@mui/material';
 import React from 'react';
 import { Link as RouterLink, To } from 'react-router-dom';
+
+import { useGetStaticPages } from '@/hooks/staticPages';
 
 const FooterLink: React.FC<React.PropsWithChildren<{ to: To }>> = ({ to, children }) => (
   <Link component={RouterLink} to={to} sx={{ width: { xs: '100%', sm: 'auto' }, textDecoration: 'none', textAlign: 'center' }}>
@@ -13,15 +14,15 @@ const YearText: React.FC = () => {
   const startYear = 2023;
   const endYear = new Date().getFullYear();
   if (startYear !== endYear) {
-    return <Typography component="span">{startYear}&ndash;{endYear}</Typography>;
+    return <span>{startYear}&ndash;{endYear}</span>;
   }
-  return <Typography component="span">{endYear}</Typography>;
+  return <span>{endYear}</span>;
 };
 
 export const Footer: React.FC = () => {
   const theme = useTheme();
 
-  const staticPages = useGetStaticPages()
+  const staticPages = useGetStaticPages();
 
   return (
     <Paper
@@ -37,10 +38,13 @@ export const Footer: React.FC = () => {
               staticPages.data && staticPages.data.map((page) => <FooterLink key={page.id} to={`/static_page/${page.id}`}>{page.title}</FooterLink>)
             }
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'block' } }} />
-            <Typography variant="body1" sx={{ width: { xs: '100%', sm: 'auto' }, textAlign: 'center' }}>Copyright&nbsp;&copy;&nbsp;<YearText /></Typography>
           </Stack>
-          <Box sx={{ width: '100%' }}>
-            <Typography sx={{ mx: 'auto', display:'block', width: 'fit-content' }}>
+          <Box sx={{ width: '100%' }} display="flex" justifyContent='center' gap={1}>
+            <Typography variant="body2" sx={{ textAlign: 'center', alignSelf: 'center' }}>
+              Copyright&nbsp;&copy;&nbsp;<YearText />
+            </Typography>
+            <Typography sx={{ width: 'fit-content', alignSelf: 'center' }} variant='body2'>|</Typography>
+            <Typography sx={{ width: 'fit-content', alignSelf: 'center' }} variant='body2'>
               Erstellt mit&nbsp;<Typography component="span" sx={{ color: 'red' }}>&#x2764;</Typography>&nbsp;durch
               {' '}
               <Link component={RouterLink} to="https://felixgohla.de/" target="_blank">Felix Gohla</Link>
