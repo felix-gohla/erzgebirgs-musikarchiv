@@ -85,7 +85,17 @@ export const findSongsByAuthorId = async (authorId: Author['id'], options?: Quer
       ...options,
       sort: ['title'],
       fields: SONG_FIELDS,
-      deep: { ...options?.deep, authors: { _filter: { authors_id: { id: { _eq: authorId } } } } },
+      filter: {
+        ...options?.filter,
+        authors: {
+          ...options?.filter?.authors,
+          authors_id: {
+            id: {
+              _eq: authorId,
+            },
+          },
+        },
+      },
     }),
 );
 
@@ -96,12 +106,22 @@ export const findSongsByGenreId = async (genreId: Genre['id'], options?: Query<M
       ...options,
       sort: ['title'],
       fields: SONG_FIELDS,
-      deep: { ...options?.deep, genres: { _filter: { genres_id: { id: { _eq: genreId } } } } },
+      filter: {
+        ...options?.filter,
+        genres: {
+          ...options?.filter?.genres,
+          genres_id: {
+            id: {
+              _eq: genreId,
+            },
+          },
+        },
+      },
     },
   ),
 );
 
-const AUTHORS_FIELDS = ['*', 'count(songs)' as 'name', 'CONCAT('] satisfies Query<MusikDbCms, Author>['fields'];
+const AUTHORS_FIELDS = ['*', 'count(songs)' as 'name'] satisfies Query<MusikDbCms, Author>['fields'];
 
 export const findAuthors = async (options?: Query<MusikDbCms, Author>): Promise<Author[]> => directus.request(
   readItems(
