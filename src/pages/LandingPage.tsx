@@ -41,7 +41,7 @@ const AuthorsCard: React.FC = () => (
       </Typography>
     </CardContent>
     <CardActions>
-      <Button size="small" startIcon={<RightArrowIcon />}>Durchsuchen</Button>
+      <Button component={Link} to={'/authors/'} size="small" startIcon={<RightArrowIcon />}>Durchsuchen</Button>
     </CardActions>
   </Card>
 );

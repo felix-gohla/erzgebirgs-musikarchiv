@@ -15,9 +15,13 @@ export interface Author {
      */
     date_updated: string | null;
     /**
-     * The author's full name.
+     * The author's last name.
      */
     name: string;
+    /**
+     * The author's first name.
+     */
+    first_name: string;
     /**
      * An optional ID for an image file.
      */

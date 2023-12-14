@@ -107,7 +107,7 @@ export const findAuthors = async (options?: Query<MusikDbCms, Author>): Promise<
   readItems(
     'authors',{
       fields: AUTHORS_FIELDS,
-      sort: ['name'],
+      sort: ['name', 'first_name'],
       ...options,
     },
   ),

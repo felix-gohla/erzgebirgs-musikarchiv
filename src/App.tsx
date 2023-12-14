@@ -8,6 +8,7 @@ import {
 import { ErrorBoundary, ThemeProvider } from '@/components';
 
 import { AuthorPage } from './pages/AuthorPage';
+import { AuthorsListPage } from './pages/AuthorsListPage';
 import { GenrePage } from './pages/GenrePage';
 import { GenresListPage } from './pages/GenresListPage';
 import { LandingPage } from './pages/LandingPage';
@@ -28,6 +29,7 @@ export const App: React.FC = () => {
               <Route path="/" element={<LandingPage />} />
               <Route path="/songs/:id" element={<SongPage />} />
               <Route path="/songs/" element={<SongListPage />} />
+              <Route path="/authors/" element={<AuthorsListPage />} />
               <Route path="/authors/:id" element={<AuthorPage />} />
               <Route path="/genres/" element={<GenresListPage />} />
               <Route path="/genres/:id" element={<GenrePage />} />
