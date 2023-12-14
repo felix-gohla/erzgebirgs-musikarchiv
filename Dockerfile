@@ -1,6 +1,8 @@
+ARG BACKEND_BASE=https://api.musikdb.felixgohla.de
+
 #############################
-# Build container
-FROM node:20-alpine as build
+# Dev container
+FROM node:20-alpine as dev
 
 # Enable updates for yarn
 RUN corepack enable
@@ -14,7 +16,17 @@ COPY .yarnrc.yml /app
 RUN yarn install --immutable
 
 # Copy the rest and build the app.
-COPY . /app
+COPY index.html tsconfig.json tsconfig.node.json vite.config.ts /app/
+COPY public /app/public/
+COPY src /app/src/
+
+#############################
+# Build container
+FROM dev AS build
+ARG BACKEND_BASE
+
+ENV VITE_CMS_API_URL=${BACKEND_BASE}
+
 RUN yarn build
 
 #############################
@@ -29,7 +41,7 @@ RUN rm /etc/nginx/http.d/default.conf
 COPY docker/nginx.conf /etc/nginx/http.d
 
 # Copy build artefacts.
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build --chown=www-data:www-data /app/dist /usr/share/nginx/html
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
