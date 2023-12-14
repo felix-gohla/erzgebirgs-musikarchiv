@@ -75,14 +75,14 @@ const columns = {
     maxWidth: '250px',
     renderRow: (song) => (
       <Stack direction="row" spacing={1} sx={(theme) => ({ mb: theme.spacing(1), overflowX: 'scroll' })} useFlexGap>
-        { song.authors.map((author) => (<Chip size='small' key={author.authors_id.id} label={author.authors_id.name} />)) }
+        { song.authors.map((author) => (<Chip size='small' key={author.authors_id.id} label={`${author.authors_id.first_name} ${author.authors_id.name}`} />)) }
       </Stack>
     ),
     filterSettings: {
       type: 'multi-select',
       options: async () => {
-        const authors = await findAuthors({ fields: ['id', 'name'] });
-        return authors.map((author) => ({ id: author.id, label: author.name }));
+        const authors = await findAuthors({ fields: ['id', 'first_name', 'name'] });
+        return authors.map((author) => ({ id: author.id, label: `${author.first_name} ${author.name}` }));
       },
       dropdownTitle: 'Autor',
       order: 2,

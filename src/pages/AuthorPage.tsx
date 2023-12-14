@@ -51,12 +51,14 @@ export const AuthorPage: React.FC = () => {
       <Grid container sx={{ mb: theme.spacing(2) }} rowSpacing={2} columnSpacing={2}>
         <Grid item xs={12} lg={author.image ? 8 : 12}>
           <Typography variant='h1'>
+            { author.first_name }
+            {' '}
             { author.name }
           </Typography>
           {
             author.description
               ? <HtmlText html={author.description} />
-              : <Typography variant='subtitle1'>Für {author.name} wurde kein Beschreibungstext angegeben.</Typography>
+              : <Typography variant='subtitle1'>Für {`${author.first_name} ${author.name}`} wurde kein Beschreibungstext angegeben.</Typography>
           }
         </Grid>
         { author.image && (
@@ -71,7 +73,7 @@ export const AuthorPage: React.FC = () => {
       <Box sx={{ mt: theme.spacing(4) }}>
         <SearchableTable
           title='Lieder'
-          subtitle={`Folgende Lieder wurden für ${author.name} gefunden:`}
+          subtitle={`Folgende Lieder wurden für ${author.first_name} ${author.name} gefunden:`}
           loadData={async () => songs || []}
           totalRowCount={songs?.length || 0}
           enableSelection={false}

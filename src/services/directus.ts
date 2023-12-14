@@ -44,9 +44,9 @@ const directus = createDirectus<MusikDbCms>(DIRECTUS_BASE_URL).with(rest());
 const SONG_FIELDS = [
   '*',
   'authors.authors_id.*' as 'authors',
-  'authors.authors_id.count(songs)' as 'authors',
+  'count(authors)',
   'genres.genres_id.*' as 'genres',
-  'genres.genres_id.count(songs)' as 'genres',
+  'count(genres)',
   'audio',
 ] satisfies Query<MusikDbCms, Song>['fields'];
 
@@ -101,7 +101,7 @@ export const findSongsByGenreId = async (genreId: Genre['id'], options?: Query<M
   ),
 );
 
-const AUTHORS_FIELDS = ['*', 'count(songs)' as 'name'] satisfies Query<MusikDbCms, Author>['fields'];
+const AUTHORS_FIELDS = ['*', 'count(songs)' as 'name', 'CONCAT('] satisfies Query<MusikDbCms, Author>['fields'];
 
 export const findAuthors = async (options?: Query<MusikDbCms, Author>): Promise<Author[]> => directus.request(
   readItems(
