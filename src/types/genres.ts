@@ -19,7 +19,7 @@ export interface Genre {
      */
     name: string;
     /**
-     * The number of songs for this genre.
+     * The number of songs for this genre (sadly, directus only returns this as a string).
      */
-    songs_count: number;
+    songs_count: string;
 }

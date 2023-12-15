@@ -31,7 +31,7 @@ export interface Author {
      */
     description: string | null;
     /**
-     * The number of songs for this author.
+     * The number of songs for this author (sadly, directus only returns this as a string).
      */
-    songs_count: number;
+    songs_count: string;
 }

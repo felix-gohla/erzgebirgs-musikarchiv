@@ -121,7 +121,7 @@ export const findSongsByGenreId = async (genreId: Genre['id'], options?: Query<M
   ),
 );
 
-const AUTHORS_FIELDS = ['*', 'count(songs)' as 'name'] satisfies Query<MusikDbCms, Author>['fields'];
+const AUTHORS_FIELDS = ['*', 'count(songs)'] satisfies Query<MusikDbCms, Author>['fields'];
 
 export const findAuthors = async (options?: Query<MusikDbCms, Author>): Promise<Author[]> => directus.request(
   readItems(
@@ -143,7 +143,7 @@ export const findAuthorById = async (id: Author['id']): Promise<Author | null | 
   ),
 );
 
-const GENRES_FIELDS = ['*', 'count(songs)' as 'name'] satisfies Query<MusikDbCms, Author>['fields'];
+const GENRES_FIELDS = ['*', 'count(songs)'] satisfies Query<MusikDbCms, Genre>['fields'];
 
 export const findGenres = async (options?: Query<MusikDbCms, Genre>): Promise<Genre[]> => directus.request(
   readItems(
