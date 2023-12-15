@@ -67,9 +67,8 @@ export const TableToolbar = <F extends FilterModelFromColumnDefinition<CD, T>, C
         )}
         { isDesktop && !!onToggleFilterClick &&
           <>
-            <Box />
             <FilterChips stackProps={{ flexWrap: 'wrap', sx: { maxWidth: '75%' } }} showClearAllButton {...resetFilterChipsProps} />
-            <Box />
+            <Box/>
           </>
         }
         { !isDesktop && !!onToggleFilterClick && (

@@ -100,25 +100,6 @@ export const SearchableTable = <C extends ColumnDefinition<T>, T extends TypeWit
   const [rows, setRows] = React.useState<T[]>([]);
   const [isLoadingData, setIsLoadingData] = React.useState(false);
   const isLoading = isLoadingData || isLoadingOverwrite;
-  const loadDataCallback = React.useCallback((offset: number, limit: number, order: Order, orderBy: keyof T & string, filter: FilterModelFromColumnDefinition<C, T>) => {
-    let active = true;
-    setIsLoadingData(true);
-
-    loadData(offset, limit, order, orderBy, filter).then((fetchedData) => {
-      if (active === true) {
-        setIsLoadingData(false);
-        setRows(fetchedData);
-      }
-    }).catch(() => {
-      if (active === true) {
-        setIsLoadingData(false);
-      }
-    });
-
-    return () => {
-      active = false;
-    };
-  }, [loadData, setIsLoadingData]);
   const numLoadingAnimationRows = Math.min(totalRowCount, rowsPerPage);
 
   // Column handling.
@@ -202,15 +183,25 @@ export const SearchableTable = <C extends ColumnDefinition<T>, T extends TypeWit
   // Data fetching.
   React.useEffect(
     () => {
-      loadDataCallback(
-        page * rowsPerPage,
-        Math.min(rowsPerPage, totalRowCount),
-        order,
-        orderBy,
-        filterModel,
-      );
+      let active = true;
+      setIsLoadingData(true);
+
+      loadData(page * rowsPerPage, Math.min(rowsPerPage, totalRowCount), order, orderBy, filterModel).then((fetchedData) => {
+        if (active === true) {
+          setIsLoadingData(false);
+          setRows(fetchedData);
+        }
+      }).catch(() => {
+        if (active === true) {
+          setIsLoadingData(false);
+        }
+      });
+
+      return () => {
+        active = false;
+      };
     },
-    [loadDataCallback, page, rowsPerPage, totalRowCount, order, orderBy, filterModel],
+    [page, rowsPerPage, totalRowCount, order, orderBy, filterModel, loadData],
   );
 
 
@@ -275,26 +266,6 @@ export const SearchableTable = <C extends ColumnDefinition<T>, T extends TypeWit
   };
 
   const isSelected = (id: T['id']) => (!enableSelection ? false : (selected.indexOf(id) !== -1));
-
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
-  const visibleRows = React.useMemo(
-    () => {
-      const column = columns[orderBy];
-      if (!column || !column.sortable) {
-        throw new Error(`Cannot sort column "${orderBy}"`);
-      }
-      return rows
-        .sort((lhs, rhs) => column.comparator(order, lhs, rhs))
-        .slice(
-          page * rowsPerPage,
-          page * rowsPerPage + rowsPerPage,
-        );
-    },
-    [rows, columns, order, orderBy, page, rowsPerPage],
-  );
 
   // Filtering & Filter dialog.
   const showFilters = filterableColumns.length > 0;
@@ -377,7 +348,7 @@ export const SearchableTable = <C extends ColumnDefinition<T>, T extends TypeWit
                           <Typography variant='overline' sx={{ textAlign: 'center' }}>
                             { isLoading
                               ? <CircularProgress sx={{ mx: theme.spacing(2) }} size='1em' />
-                              : <strong>{ rows.length } { rows.length !== 1 ? 'Einträge' : 'Eintrag' } gefunden</strong>
+                              : <strong>{ totalRowCount } { totalRowCount !== 1 ? 'Einträge' : 'Eintrag' } gefunden</strong>
                             }
                           </Typography>
                         </Box>
@@ -411,7 +382,7 @@ export const SearchableTable = <C extends ColumnDefinition<T>, T extends TypeWit
               />
               <TableBody>
                 {isLoading && <TableRowsLoadingAnimation numColumns={Object.keys(columns).length} numRows={numLoadingAnimationRows} />}
-                {visibleRows.map((row, index) => {
+                {rows.map((row, index) => {
                   const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -464,16 +435,7 @@ export const SearchableTable = <C extends ColumnDefinition<T>, T extends TypeWit
                     </TableRow>
                   );
                 })}
-                { emptyRows > 0 && (
-                  <TableRow
-                    sx={{
-                      height: 53 * emptyRows,
-                    }}
-                  >
-                    <TableCell colSpan={6} />
-                  </TableRow>
-                )}
-                { visibleRows.length === 0 && (
+                { rows.length === 0 && (
                   <TableRow sx={{
                     height: 53 * 2,
                   }}>
@@ -489,7 +451,7 @@ export const SearchableTable = <C extends ColumnDefinition<T>, T extends TypeWit
         <TablePagination
           rowsPerPageOptions={[5, 10, 25, 50, 100, 200]}
           component="div"
-          count={rows.length}
+          count={totalRowCount}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

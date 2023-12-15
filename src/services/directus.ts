@@ -50,15 +50,17 @@ const SONG_FIELDS = [
   'audio',
 ] satisfies Query<MusikDbCms, Song>['fields'];
 
-export const findSongs = async (options?: Query<MusikDbCms, Song>): Promise<Song[]> => directus.request(
-  readItems(
-    'songs', {
-      ...options,
-      sort: ['title'],
-      fields: SONG_FIELDS,
-    },
-  ),
-);
+export const findSongs = async (options?: Query<MusikDbCms, Song>): Promise<Song[]> => {
+  return directus.request(
+    readItems(
+      'songs', {
+        ...options,
+        sort: options?.sort ?? ['title' as const],
+        fields: SONG_FIELDS,
+      },
+    ),
+  );
+};
 
 export const countSongs = async (filter: Query<MusikDbCms, Song>['filter']): Promise<number> => {
   const response = await directus.request(

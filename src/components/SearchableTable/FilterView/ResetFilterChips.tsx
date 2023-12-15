@@ -79,7 +79,7 @@ export const ResetFilterChips = <F extends FilterModelFromColumnDefinition<CD, T
     return null;
   }
   return (
-    <Stack direction="row" gap={1} { ...stackProps }>
+    <Stack direction="row" gap={1} { ...stackProps } alignItems="center">
       { filteredColumnTitles.map(([columnId, title]) =>
         <Chip
           key={`filter-chip-${String(columnId)}`}

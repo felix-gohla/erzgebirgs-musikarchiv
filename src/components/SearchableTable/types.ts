@@ -144,9 +144,19 @@ export type FilterableColumns <T, CD extends ColumnDefinition<T>> = {
   : never
 }
 
+/**
+ * A callback for loading data.
+ * Only return the visible rows.
+ *
+ * @param offset The offset within the collection (note the `order` and `orderBy`, as well as the `filter` parameter).
+ * @param limit The number of items to load.
+ * @param order Whether to sort ascending or descending.
+ * @param orderBy The parameter to sort for.
+ * @param filter A filter that is selected by the user.
+ */
 export type LoadDataCallback<T, CD extends ColumnDefinition<T>> = (
   offset: number,
-  idx: number,
+  limit: number,
   order: Order,
   orderBy: keyof T & string,
   filter: FilterModelFromColumnDefinition<CD, T>

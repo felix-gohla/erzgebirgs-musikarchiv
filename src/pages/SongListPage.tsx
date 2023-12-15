@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { AudioDownloadButton, DirectusImage, Loader, MainLayout, PdfDownloadButton } from '@/components';
 import { type ColumnDefinition, type FilterModelFromColumnDefinition, LoadDataCallback,SearchableTable } from '@/components/SearchableTable';
-import { useGetSongs } from '@/hooks';
+import { useCountSongs, useGetSongs } from '@/hooks';
 import { findAuthors, findGenres } from '@/services';
 import { Song } from '@/types';
 import { DOMPurify } from '@/utils';
@@ -135,23 +135,33 @@ const fetchFilterFromModel = (filterModel: SongFilterModel) => {
 export const SongListPage: React.FC = () => {
   const theme = useTheme();
 
-  // const [filterModel, setFilterModel] = React
-  // const [isLoadingSongs, setIsLoadingSongs] = React.useState(false);
   const { data: songs, error: loadSongsError, isLoading: isLoadingSongs, refetch } = useGetSongs();
+  const { data: songsCount, isLoading: isLoadingSongsCount, refetch: refetchSongCount } = useCountSongs();
 
-  const songCount = songs?.length || 0;
-
-  const loadDataCallback: LoadDataCallback<Song, typeof columns> = useCallback(async (
-    _offset,
-    _idx,
-    _order,
-    _sortation,
-    filter,
-  ) => await refetch({ filter: fetchFilterFromModel(filter) }) || [], [refetch]);
+  const loadDataCallback: LoadDataCallback<Song, typeof columns> = useCallback(
+    async (
+      offset,
+      limit,
+      order,
+      orderBy,
+      filter,
+    ) => {
+      const sort = order === 'asc' ? orderBy : `-${orderBy}` as const;
+      const newFilter = fetchFilterFromModel(filter);
+      refetchSongCount(newFilter);
+      return await refetch({
+        filter: newFilter,
+        offset: offset,
+        limit,
+        sort,
+      }) || [];
+    },
+    [refetch, refetchSongCount],
+  );
 
   const navigate = useNavigate();
 
-  const isLoading = isLoadingSongs;
+  const isLoading = isLoadingSongs || isLoadingSongsCount;
 
   const tableSx = React.useMemo(() => ({ mt: theme.spacing(4) }), [theme]);
   const clickCallback = React.useCallback((_event: React.MouseEvent, songId: Song['id']) => { navigate(`/songs/${songId}`); }, [navigate]);
@@ -178,7 +188,7 @@ export const SongListPage: React.FC = () => {
       </Typography>
       <SearchableTable
         title="Alle Lieder"
-        totalRowCount={songCount || 10}
+        totalRowCount={songsCount || 0}
         loadData={loadDataCallback}
         defaultOrder='title'
         columns={columns}
