@@ -70,7 +70,7 @@ export const LandingPage: React.FC = () => {
   return (
     <LandingLayout>
       <Box sx={{ pt: { md: theme.spacing(4), lg: theme.spacing(8) }, width: '100%', mx: 'auto' }}>
-        <Stack direction={{ xs: 'column', sm: 'row' }} sx={{ alignItems: 'center', mb: 2 }} useFlexGap columnGap={4} rowGap={2}>
+        <Stack direction={{ xs: 'column', sm: 'row' }} sx={{ mb: 2 }} justifyContent="center" alignContent="center" useFlexGap columnGap={4} rowGap={2}>
           <Box>
             <Logo width={150} variant='text-below' />
           </Box>
@@ -84,8 +84,12 @@ export const LandingPage: React.FC = () => {
           </Box>
         </Stack>
         <Typography variant="body1" sx={{ mb: theme.spacing(4) }}>
-          Hier im Erzgebirgs-Musikarchiv finden Sie volkstümliche Lieder zum Stöbern, Anhören und Musizieren.
-          Hier folgt noch Beschreibungstext.
+          <strong>Willkommen im Erzgebirgs-Musikarchiv</strong>, einer Sammlung authentischer Melodien, zusammengetragen durch Monika Knauth.<br />
+          Über Jahrzehnte hinweg hat sie diese Lieder liebevoll gesammelt und digitalisiert.
+          Hier können Sie in die reiche musikalische Geschichte des Erzgebirges eintauchen, von traditionellen Volks- und Bergarbeitsliedern bis hin zu festlichen Weihnachtsklängen.
+          Entdecken Sie die Vielfalt dieser einzigartigen Sammlung und lassen Sie sich von den charmanten Klängen dieser Region verzaubern.
+          Das Erzgebirgische Liederarchiv lädt Sie ein, die musikalische Seele dieser traditionsreichen Gegend zu erkunden.
+          Viel Spaß beim Stöbern und Musizieren!
         </Typography>
         <DatabaseSearchField label="Suchen…" />
       </Box>
