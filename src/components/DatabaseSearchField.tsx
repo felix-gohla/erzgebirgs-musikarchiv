@@ -45,22 +45,31 @@ export const DatabaseSearchField: React.FC<SongSearchFieldProps> = (props) => {
     label='Suchen…'
     {...props}
     fetchOptions={async (searchTerm): Promise<AllEntities[]> => {
+      const splitSearchTerm = searchTerm.split(' ');
       const [songs, authors, genres] = await Promise.all([
         findSongs({
           filter: searchTerm !== '' ? { '_or': [
-            { title: { '_icontains': searchTerm } as FilterOperators<string> },
-            { text: { '_icontains': searchTerm } as FilterOperators<string> },
-            { authors: { authors_id: { name: { '_icontains': searchTerm } as FilterOperators<string> } } },
-            { genres: { genres_id: { name: { '_icontains': searchTerm } as FilterOperators<string> } } },
+            ...splitSearchTerm.flatMap((term) => [
+              { title: { '_icontains': term } as FilterOperators<string> },
+              { text: { '_icontains': term } as FilterOperators<string> },
+              { authors: { authors_id: { name: { '_icontains': term } as FilterOperators<string> } } },
+              { authors: { authors_id: { first_name: { '_icontains': term } as FilterOperators<string> } } },
+              { genres: { genres_id: { name: { '_icontains': term } as FilterOperators<string> } } },
+            ]),
           ] } : {},
           limit: 25,
         }),
         findAuthors({
-          filter: searchTerm !== '' ? { name: { '_icontains': searchTerm } as FilterOperators<string>  } : {},
-          sort: ['name'],
+          filter: searchTerm !== '' ? { '_or': splitSearchTerm.flatMap((term) => [
+            { name: { '_icontains': term } as FilterOperators<string>  },
+            { first_name: { '_icontains': term } as FilterOperators<string>  },
+          ])} : {},
+          limit: 10,
+          sort: ['name', 'first_name'],
         }),
         findGenres({
-          filter: searchTerm !== '' ? { name: { '_icontains': searchTerm } as FilterOperators<string>  } : {},
+          filter: searchTerm !== '' ? { '_or': splitSearchTerm.flatMap((term) => ({ name: { '_icontains': term } as FilterOperators<string> })) } : {},
+          limit: 10,
           sort: ['name'],
         }),
       ]);
@@ -107,7 +116,7 @@ export const DatabaseSearchField: React.FC<SongSearchFieldProps> = (props) => {
         return entity.data.title;
       }
       if (entity.type === 'author') {
-        return entity.data.name;
+        return `${entity.data.first_name} ${entity.data.name}`;
       }
       if (entity.type === 'genre') {
         return entity.data.name;
