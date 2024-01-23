@@ -92,7 +92,13 @@ const HeaderBlock: React.FC<{ block: IHeadingBlock }> = ({ block }) => {
     6: 'h6',
   } as const;
   const variant = variants[block.data.level] ?? 'h6';
-  return <Typography variant={variant} mb={(theme) => theme.spacing(1)}>{block.data.text}</Typography>;
+  return <Typography
+    variant={variant}
+    mt={(theme) => theme.spacing(2)}
+    mb={(theme) => theme.spacing(1)}
+  >
+    {block.data.text}
+  </Typography>;
 };
 
 const OrderedList: React.FC<{ items: INestedListBlock['data']['items'] }> = ({ items }) =>
