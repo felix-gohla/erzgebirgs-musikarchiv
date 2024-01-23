@@ -35,6 +35,7 @@ FROM alpine:3.17
 
 # Install nginx & configure.
 RUN apk --update --no-cache add \
+    curl \
     nginx \
     && true
 RUN rm /etc/nginx/http.d/default.conf
