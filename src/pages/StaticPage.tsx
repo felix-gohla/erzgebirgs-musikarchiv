@@ -97,8 +97,8 @@ const HeaderBlock: React.FC<{ block: IHeadingBlock }> = ({ block }) => {
   const variant = variants[block.data.level] ?? 'h6';
   return <Typography
     variant={variant}
-    mt={(theme) => theme.spacing(2)}
-    mb={(theme) => theme.spacing(1)}
+    mt={(theme) => theme.spacing(4)}
+    mb={(theme) => theme.spacing(2)}
   >
     {block.data.text}
   </Typography>;
@@ -130,7 +130,8 @@ const ImageBlock: React.FC<{block: IImageBlock}> = ({ block }) => (
     <Box mb={(theme) => theme.spacing(0.5)}>
       <DirectusImage
         fileId={block.data.file.fileId}
-        thumbnail={{ height: 512, quality: 100 }}
+        thumbnail={{ height: 512, quality: 98 }}
+        height={512}
         alt={block.data.caption || undefined}
       />
     </Box>
@@ -139,7 +140,7 @@ const ImageBlock: React.FC<{block: IImageBlock}> = ({ block }) => (
 );
 
 const DividerBlock: React.FC<{block: IDelimiterBlock}> = () => (
-  <Box whiteSpace={(theme) => ({ my: theme.spacing(2) })}>
+  <Box sx={(theme) => ({ my: theme.spacing(2) })}>
     <hr />
   </Box>
 );
