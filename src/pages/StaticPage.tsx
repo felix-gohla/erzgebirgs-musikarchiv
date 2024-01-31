@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import { DirectusImage, Loader, MainLayout } from '@/components';
 import { useGetStaticPageById } from '@/hooks/staticPages';
 import {
+  type DelimiterBlock as IDelimiterBlock,
   type HeadingBlock as IHeadingBlock,
   type ImageBlock as IImageBlock,
   type NestedListBlock as INestedListBlock,
@@ -68,6 +69,8 @@ export const StaticPagePage: React.FC = () => {
               return <ImageBlock key={block.id} block={block} />;
             case 'raw':
               return <RawHtmlBlock key={block.id} block={block} />;
+            case 'delimiter':
+              return <DividerBlock key={block.id} block={block} />;
             default:
               return null;
             }
@@ -132,6 +135,12 @@ const ImageBlock: React.FC<{block: IImageBlock}> = ({ block }) => (
       />
     </Box>
     { block.data.caption && <Typography variant='subtitle2'>{block.data.caption}</Typography> }
+  </Box>
+);
+
+const DividerBlock: React.FC<{block: IDelimiterBlock}> = () => (
+  <Box whiteSpace={(theme) => ({ my: theme.spacing(2) })}>
+    <hr />
   </Box>
 );
 

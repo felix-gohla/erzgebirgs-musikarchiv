@@ -6,6 +6,7 @@ export {
   type CodeBlock,
   type ContentBlock,
   type ContentBlocks,
+  type DelimiterBlock,
   type HeadingBlock,
   type ImageBlock,
   type NestedListBlock,

@@ -127,6 +127,11 @@ export type ChecklistBlock = BasicBlock & {
     };
 }
 
+export type DelimiterBlock = BasicBlock & {
+    type: 'delimiter';
+    data: unknown,
+}
+
 export type RawHtmlBlock = BasicBlock & {
     type: 'raw';
     data: {
@@ -142,4 +147,5 @@ export type ContentBlock =
     | CodeBlock
     | ImageBlock
     | ChecklistBlock
-    | RawHtmlBlock;
+    | RawHtmlBlock
+    | DelimiterBlock;
