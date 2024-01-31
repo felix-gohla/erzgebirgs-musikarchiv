@@ -29,6 +29,7 @@ export const Footer: React.FC = () => {
       component="footer"
       square
       variant="elevation"
+      elevation={8}
       sx={{ width: '100%', minHeight: '128px', py: theme.spacing(3) }}
     >
       <Container maxWidth="xl">
