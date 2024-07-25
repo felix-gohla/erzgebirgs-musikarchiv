@@ -41,12 +41,12 @@ export interface Song {
     /**
      * The authors that are linked to this song.
      */
-    authors: SongsAuthors[];
+    authors: SongsAuthors[] | null;
 
     /**
      * The genres that are linked to this song.
      */
-    genres: SongsGenres[];
+    genres: SongsGenres[] | null;
 }
 
 interface SongRelation {

@@ -80,12 +80,13 @@ export const FilterView = <C extends ColumnDefinition<T>, T>(props: FilterViewPr
         currentSet.delete(optionId);
       }
       const filterType = filterableColumns.find(([id]) => id === columnId)?.[1].filterSettings?.type;
-      const newFilterModel = {
+
+      const newFilterModel: FilterModelFromColumnDefinition<C, T> = {
         ...filterModel,
         [columnId]: {
           columnId,
           filterType,
-          ...filterModel[columnId],
+          ...(filterModel[columnId]),
           filterValue: currentSet.size > 0 ? currentSet : undefined,
         },
       };
@@ -97,7 +98,7 @@ export const FilterView = <C extends ColumnDefinition<T>, T>(props: FilterViewPr
   const setFilterModelText = React.useCallback(
     (columnId: keyof C, newValue: string) => {
       const filterType = filterableColumns.find(([id]) => id === columnId)?.[1].filterSettings?.type;
-      const newFilterModel = {
+      const newFilterModel: FilterModelFromColumnDefinition<C, T> = {
         ...filterModel,
         [columnId]: {
           columnId,

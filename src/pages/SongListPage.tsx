@@ -55,7 +55,7 @@ const columns = {
     maxWidth: '250px',
     renderRow: (song) => (
       <Stack direction="row" spacing={1} sx={(theme) => ({ mb: theme.spacing(1), overflowX: 'scroll' })} useFlexGap>
-        { song.genres.map((genre) => (<Chip size='small' key={genre.genres_id.id} label={genre.genres_id.name} />)) }
+        { song.genres?.map((genre) => (<Chip size='small' key={genre.genres_id.id} label={genre.genres_id.name} />)) }
       </Stack>
     ),
     filterSettings: {
@@ -75,7 +75,7 @@ const columns = {
     maxWidth: '250px',
     renderRow: (song) => (
       <Stack direction="row" spacing={1} sx={(theme) => ({ mb: theme.spacing(1), overflowX: 'scroll' })} useFlexGap>
-        { song.authors.map((author) => (<Chip size='small' key={author.authors_id.id} label={`${author.authors_id.first_name} ${author.authors_id.name}`} />)) }
+        { song.authors?.map((author) => (<Chip size='small' key={author.authors_id.id} label={`${author.authors_id.first_name} ${author.authors_id.name}`} />)) }
       </Stack>
     ),
     filterSettings: {

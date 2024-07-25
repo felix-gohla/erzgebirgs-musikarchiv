@@ -1,3 +1,5 @@
+import { Song } from "./songs";
+
 /**
  * A genre.
  */
@@ -21,5 +23,9 @@ export interface Genre {
     /**
      * The number of songs for this genre (sadly, directus only returns this as a string).
      */
-    songs_count: string;
+    songs_count: number;
+    /**
+     * The songs that are assigned to this genre.
+     */
+    songs: Song[] | null;
 }

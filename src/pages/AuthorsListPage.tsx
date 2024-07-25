@@ -93,7 +93,7 @@ export const AuthorsListPage: React.FC = () => {
                               { ' ' }
                               { author.name }
                               {' '}
-                              ({ author.songs_count } { parseInt(author.songs_count) !== 1 ? 'Lieder' : 'Lied' })
+                              ({ author.songs_count } { author.songs_count !== 1 ? 'Lieder' : 'Lied' })
                             </ListItemText>
                           </MuiLink>
                         </ListItem>

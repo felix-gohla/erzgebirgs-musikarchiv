@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { findStaticPageById, findStaticPages, QueryFilter } from '@/services';
+import { findStaticPageById, findStaticPages, type DbQueryFilter } from '@/services';
 import { StaticPage } from '@/types';
 
 import { useDeepCompareMemoize } from './deepCompareMemoize';
 import { FetchingHook, useBaseFetchHook } from './utils';
 
-export const useGetStaticPages = (options?: QueryFilter<StaticPage>, enabled = true): FetchingHook<Pick<StaticPage, 'id' | 'title'>[]> => {
+export const useGetStaticPages = (options?: DbQueryFilter<StaticPage>, enabled = true): FetchingHook<Pick<StaticPage, 'id' | 'title'>[]> => {
   const memoizedOptions = useDeepCompareMemoize(options);
   const fetcher = React.useCallback(() => findStaticPages(memoizedOptions), [memoizedOptions]);
   return useBaseFetchHook(fetcher, enabled);

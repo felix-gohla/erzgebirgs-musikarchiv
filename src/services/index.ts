@@ -16,6 +16,6 @@ export {
   getFile,
   getImage,
   type Image,
-  type QueryFilter,
-  type QueryOptions,
+  type DbQueryFilter,
+  type DbQueryOptions,
 } from './directus';

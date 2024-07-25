@@ -1,4 +1,4 @@
-import { aggregate, createDirectus,Query, readFile, readItem, readItems, rest } from '@directus/sdk';
+import { aggregate, createDirectus,Query, QueryFields, QueryFilter, readFile, readItem, readItems, rest } from '@directus/sdk';
 
 import { Author, Genre, Song, SongsAuthors, SongsGenres, StaticPage } from '@/types';
 
@@ -48,7 +48,7 @@ const SONG_FIELDS = [
   'genres.genres_id.*' as 'genres',
   'count(genres)',
   'audio',
-] satisfies Query<MusikDbCms, Song>['fields'];
+] satisfies QueryFields<MusikDbCms, Song>;
 
 export const findSongs = async (options?: Query<MusikDbCms, Song>): Promise<Song[]> => {
   return directus.request(
@@ -62,7 +62,7 @@ export const findSongs = async (options?: Query<MusikDbCms, Song>): Promise<Song
   );
 };
 
-export const countSongs = async (filter: Query<MusikDbCms, Song>['filter']): Promise<number> => {
+export const countSongs = async (filter?: QueryFilter<MusikDbCms, Song>): Promise<number> => {
   const response = await directus.request(
     aggregate(
       'songs',
@@ -80,7 +80,13 @@ export const countSongs = async (filter: Query<MusikDbCms, Song>['filter']): Pro
 
 export const findSongById = async (id: Song['id']): Promise<Song | null | undefined> => directus.request(readItem('songs', id, { fields: SONG_FIELDS }));
 
-export const findSongsByAuthorId = async (authorId: Author['id'], options?: Query<MusikDbCms, Song>): Promise<Song[]> =>  await directus.request(
+export const findSongsByAuthorId = async (authorId: Author['id'], options?: Query<MusikDbCms, Song>): Promise<Song[]> => {
+  const filter: QueryFilter<MusikDbCms, Song> = {
+    title: undefined /* This hack is necessary as typescript cannot infer the type otherwise. */,
+    ...options?.filter,
+  };
+
+  return await directus.request(
   readItems(
     'songs',
     {
@@ -88,9 +94,9 @@ export const findSongsByAuthorId = async (authorId: Author['id'], options?: Quer
       sort: ['title'],
       fields: SONG_FIELDS,
       filter: {
-        ...options?.filter,
+        ...filter,
         authors: {
-          ...options?.filter?.authors,
+          ...filter.authors,
           authors_id: {
             id: {
               _eq: authorId,
@@ -99,9 +105,12 @@ export const findSongsByAuthorId = async (authorId: Author['id'], options?: Quer
         },
       },
     }),
-);
+)
+}
 
-export const findSongsByGenreId = async (genreId: Genre['id'], options?: Query<MusikDbCms, Song>): Promise<Song[]> => directus.request(
+export const findSongsByGenreId = async (genreId: Genre['id'], options?: Query<MusikDbCms, Song>): Promise<Song[]> => {
+  const filter: QueryFilter<MusikDbCms, Song> = { title: undefined, ...options?.filter };
+  return await directus.request(
   readItems(
     'songs',
     {
@@ -109,9 +118,9 @@ export const findSongsByGenreId = async (genreId: Genre['id'], options?: Query<M
       sort: ['title'],
       fields: SONG_FIELDS,
       filter: {
-        ...options?.filter,
+        ...filter,
         genres: {
-          ...options?.filter?.genres,
+          ...filter.genres,
           genres_id: {
             id: {
               _eq: genreId,
@@ -121,9 +130,10 @@ export const findSongsByGenreId = async (genreId: Genre['id'], options?: Query<M
       },
     },
   ),
-);
+)
+};
 
-const AUTHORS_FIELDS = ['*', 'count(songs)'] satisfies Query<MusikDbCms, Author>['fields'];
+const AUTHORS_FIELDS = ['*', 'songs_count'] satisfies QueryFields<MusikDbCms, Author>;
 
 export const findAuthors = async (options?: Query<MusikDbCms, Author>): Promise<Author[]> => directus.request(
   readItems(
@@ -145,7 +155,7 @@ export const findAuthorById = async (id: Author['id']): Promise<Author | null | 
   ),
 );
 
-const GENRES_FIELDS = ['*', 'count(songs)'] satisfies Query<MusikDbCms, Genre>['fields'];
+const GENRES_FIELDS = ['*', 'count(songs)'] satisfies QueryFields<MusikDbCms, Genre[]>;
 
 export const findGenres = async (options?: Query<MusikDbCms, Genre>): Promise<Genre[]> => directus.request(
   readItems(
@@ -167,7 +177,7 @@ export const findGenreById = async (id: Genre['id']): Promise<Genre | null | und
   ),
 );
 
-export const countGenres = async (filter: Query<MusikDbCms, Genre>['filter']): Promise<number> => {
+export const countGenres = async (filter?: QueryFilter<MusikDbCms, Genre>): Promise<number> => {
   const response = await directus.request(
     aggregate(
       'genres',
@@ -236,7 +246,7 @@ export const getImage = async (fileId: string): Promise<Image | null> => {
   };
 };
 
-export const findStaticPages = async (filter?: Query<MusikDbCms, StaticPage>['filter']): Promise<Pick<StaticPage, 'id' | 'title' | 'visible'>[]> => {
+export const findStaticPages = async (filter?: QueryFilter<MusikDbCms, StaticPage>): Promise<Pick<StaticPage, 'id' | 'title' | 'visible'>[]> => {
   const staticPages = await directus.request(
     readItems(
       'static_pages',
@@ -263,5 +273,5 @@ export const findStaticPageById = async (id: StaticPage['id']): Promise<StaticPa
   ),
 );
 
-export type QueryOptions<T> = Query<MusikDbCms, T>
-export type QueryFilter<T> = QueryOptions<T>['filter']
+export type DbQueryOptions<T> = Query<MusikDbCms, T>
+export type DbQueryFilter<T> = QueryFilter<MusikDbCms, T>

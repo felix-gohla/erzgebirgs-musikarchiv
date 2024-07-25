@@ -84,7 +84,7 @@ export const GenresListPage: React.FC = () => {
                             <ListItemText>
                               { genre.name }
                               {' '}
-                              ({ genre.songs_count } { parseInt(genre.songs_count) !== 1 ? 'Lieder' : 'Lied' })
+                              ({ genre.songs_count } { genre.songs_count !== 1 ? 'Lieder' : 'Lied' })
                             </ListItemText>
                           </MuiLink>
                         </ListItem>
