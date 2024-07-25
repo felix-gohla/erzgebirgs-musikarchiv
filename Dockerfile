@@ -31,7 +31,7 @@ RUN yarn build
 
 #############################
 # Server container
-FROM alpine:3.17
+FROM alpine:3.20
 
 # Install nginx & configure.
 RUN apk --update --no-cache add \
