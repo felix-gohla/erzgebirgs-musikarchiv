@@ -2,7 +2,7 @@ ARG BACKEND_BASE=https://api.musikdb.felixgohla.de
 
 #############################
 # Dev container
-FROM node:20-alpine as dev
+FROM node:20-alpine AS dev
 
 # Enable updates for yarn
 RUN corepack enable
