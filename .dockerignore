@@ -35,6 +35,8 @@ dist-ssr
 # Environment variables
 .env
 example.env
+public/robots.txt
+public/sitemap.xml
 
 # Docker
 Dockerfile

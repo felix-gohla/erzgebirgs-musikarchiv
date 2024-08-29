@@ -28,7 +28,7 @@ The frontend is written with [React](https://react.dev), the used package manage
 
 The application can be built using `yarn build`. The resulting files are in the `dist` directory and can be served with any webserver.
 
-Alternatively, a container image can be built e.g. using [Docker](https://www.docker.com): `docker build -t erzgebirgs-musik-archiv --build-arg BACKEND_BASE=https://<your directus API domain> .`.
+Alternatively, a container image can be built e.g. using [Docker](https://www.docker.com): `docker build -t erzgebirgs-musik-archiv --build-arg BACKEND_BASE=https://<your directus API domain> --build-arg FRONTEND_BASE=https://<your frontend domain> .`.
 The reverse proxy within the container uses port `80`.
 
 ## Directus Schema

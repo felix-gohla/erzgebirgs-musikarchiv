@@ -1,4 +1,5 @@
-ARG BACKEND_BASE=https://api.musikdb.felixgohla.de
+ARG BACKEND_BASE=https://api.erzgebirgs-musikarchiv.de
+ARG FRONTEND_BASE=https://erzgebirgs-musikarchiv.de
 
 #############################
 # Dev container
@@ -19,13 +20,16 @@ RUN yarn install --immutable
 COPY index.html tsconfig.json tsconfig.node.json vite.config.ts /app/
 COPY public /app/public/
 COPY src /app/src/
+COPY scripts /app/scripts/
 
 #############################
 # Build container
 FROM dev AS build
 ARG BACKEND_BASE
+ARG FRONTEND_BASE
 
 ENV VITE_CMS_API_URL=${BACKEND_BASE}
+ENV VITE_FRONTEND_BASE=${FRONTEND_BASE}
 
 RUN yarn build
 

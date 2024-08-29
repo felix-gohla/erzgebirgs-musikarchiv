@@ -37,3 +37,7 @@ dist-ssr
 
 # Directus
 data/
+
+# Sitemap
+public/sitemap.xml
+public/robots.txt
