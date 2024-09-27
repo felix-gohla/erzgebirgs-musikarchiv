@@ -3,13 +3,13 @@ import React, { useMemo } from 'react';
 import { createSearchParams,Link } from 'react-router-dom';
 
 import { Loader, MainLayout } from '@/components';
-import { useGetAuthors } from '@/hooks';
-import { Author } from '@/types';
+import { useGetAuthorsOverview } from '@/hooks';
+import { AuthorOverview } from '@/types';
 
 export const AuthorsListPage: React.FC = () => {
   const theme = useTheme();
 
-  const { data: authors, error: loadAuthorsError, isLoading: isLoadingAuthors } = useGetAuthors();
+  const { data: authors, error: loadAuthorsError, isLoading: isLoadingAuthors } = useGetAuthorsOverview();
 
   const isLoading = isLoadingAuthors;
 
@@ -28,7 +28,7 @@ export const AuthorsListPage: React.FC = () => {
         acc[letter] ??= [];
         acc[letter].push(author);
         return acc;
-      }, {} as Record<string, Author[]>);
+      }, {} as Record<string, AuthorOverview[]>);
   }, [authors, isLoading, sortByLastName]);
 
   if (!authors && isLoading) {

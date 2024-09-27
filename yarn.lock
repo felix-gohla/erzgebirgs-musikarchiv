@@ -516,19 +516,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@directus/sdk@npm:^16.1.1":
-  version: 16.1.1
-  resolution: "@directus/sdk@npm:16.1.1"
-  dependencies:
-    "@directus/system-data": "npm:1.1.0"
-  checksum: 10c0/49e5af041fd1fdb6c3db96096e6acb1b75c6546194902bf67e175dffedc0a28523d2732b2417202c4ff546f670c599690973d10650846ce6e326356948d03193
-  languageName: node
-  linkType: hard
-
-"@directus/system-data@npm:1.1.0":
-  version: 1.1.0
-  resolution: "@directus/system-data@npm:1.1.0"
-  checksum: 10c0/1236f0734566a92083a7ca7ef7129363be42fa1ea894003c2aa18c16af34f83a31865e595b81d38e883fd33e9dad5f8cbb8dd324401c25da188ae47b8d0541d7
+"@directus/sdk@npm:^17.0.1":
+  version: 17.0.1
+  resolution: "@directus/sdk@npm:17.0.1"
+  checksum: 10c0/aa902ffe274aad97495e3fc215815cab08f169717dfa72c292a9859244a4304e3f3b1c4acb63f3f9a0c8d43a0d39107535524aa86b123c9108bd6910ddd3d3e6
   languageName: node
   linkType: hard
 
@@ -2452,7 +2443,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "erzgebirgs-musikarchiv@workspace:."
   dependencies:
-    "@directus/sdk": "npm:^16.1.1"
+    "@directus/sdk": "npm:^17.0.1"
     "@emotion/react": "npm:^11.13.0"
     "@emotion/styled": "npm:^11.13.0"
     "@faker-js/faker": "npm:^8.4.1"

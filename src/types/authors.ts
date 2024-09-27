@@ -1,3 +1,5 @@
+import { type Song } from './songs'
+
 /**
  * An author.
  */
@@ -30,8 +32,16 @@ export interface Author {
      * A description for this author.
      */
     description: string | null;
+
     /**
-     * The number of songs for this author (sadly, directus only returns this as a string).
+     * Related songs.
+     */
+    songs: number[] | Song[] | null;
+
+    /**
+     * The number of related songs.
      */
     songs_count: number;
 }
+
+export type AuthorOverview = Pick<Author, 'id' | 'name' | 'first_name' | 'songs_count'>

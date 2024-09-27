@@ -1,4 +1,4 @@
-export { useGetAuthorById, useGetAuthors } from './authors';
+export { useGetAuthorById, useGetAuthors, useGetAuthorsOverview } from './authors';
 export { useDeepCompareMemoize } from './deepCompareMemoize';
 export { useIsDesktop } from './desktop';
 export { useGetImage } from './files';
