@@ -72,7 +72,7 @@ export const GenresListPage: React.FC = () => {
                 >
                   {
                     genres.map((genre) => {
-                      const genreFilter = createSearchParams({filter: JSON.stringify({ authors: [genre.id] })});
+                      const genreFilter = createSearchParams({filter: JSON.stringify({ genres: [genre.id] })});
                       return (
                         <ListItem
                           dense
