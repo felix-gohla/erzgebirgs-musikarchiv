@@ -19,6 +19,7 @@ export_schema()
         echo
     fi
     curl -s -H "Authorization: Bearer $source_access_token" "$source_base_url/schema/snapshot" | jq ".data" > "$1"
+    echo "Successfully exported schema to $1."
 }
 
 import_schema()
@@ -66,23 +67,21 @@ import_schema()
 ask_operation_type()
 {
     local type
-    read -p "Do you want to sync (s) a schema or only import a schema (I)? (s/I) " type
+    read -p "Do you want to export (E) a schema or import a schema (i)? (E/i) " type
     
     if [[ -z "$type" ]]
     then
-        type="I"
+        type="E"
     fi
 
-    if [ "$type" = "i" ] || [ "$type" = "I" ]
+    if [ "$type" = "i" ]
     then
         echo "Importing schema... $type"
         tmpfile=123
     else
-        echo "Syncing schema..."
+        echo "Exporting schema..."
         tmpfile=$(mktemp)
         export_schema $tmpfile
-        import_schema $tmpfile
-        rm "$tmpfile"
     fi
 }
 

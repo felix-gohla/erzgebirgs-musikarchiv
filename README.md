@@ -36,5 +36,4 @@ The reverse proxy within the container uses port `80`.
 The schema of the database is available in [schema-backup.json](schema-backup.json). In order to upgrade the schema in production, you have to do the following:
 
 1. Create an access token for the source directus instance.
-1. Create an access token for the target directus instance.
 1. Run `bash ./scripts/schema-management.sh` and follow the instructions in the script.

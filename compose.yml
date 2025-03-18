@@ -18,7 +18,7 @@ services:
       - directus-backend
 
   directus:
-    image: directus/directus:10
+    image: directus/directus:11
     restart: unless-stopped
     ports:
       - 127.0.0.1:8055:8055
@@ -39,6 +39,8 @@ services:
       - database
     environment:
       TELEMETRY: false # those fuckers
+      TELEMETRY: false # those fuckers
+      TELEMETRY_URL: "http://localhost:12345"
       KEY: ${KEY}
       SECRET: ${SECRET}
 
@@ -54,12 +56,12 @@ services:
 
       CACHE_STORE: 'redis'
       ASSETS_CACHE_TTL: '10d'
-      CACHE_TTL: '10s'
+      CACHE_TTL: '30m'
       RATE_LIMITER_STORE: 'redis'
       SYNCHRONIZATION_STORE: 'redis'
       MESSENGER_STORE: 'redis'
       CACHE_ENABLED: 'true'
-      CACHE_AUTO_PURGE: 'false'
+      CACHE_AUTO_PURGE: 'true'
 
       ADMIN_EMAIL: ${ADMIN_EMAIL}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
@@ -71,6 +73,7 @@ services:
       CORS_ORIGIN: ${CORS_ORIGIN}
 
       LOG_LEVEL: ${LOG_LEVEL}
+
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8055/server/health"]
       interval: 1m30s

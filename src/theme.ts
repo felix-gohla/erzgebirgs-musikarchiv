@@ -4,7 +4,6 @@ export const generateTheme = (prefersDarkMode: boolean) => responsiveFontSizes(c
   components: {
     MuiCssBaseline: {
       styleOverrides(theme) {
-        console.log(theme.typography)
         return {
           blockquote: {
             position: 'relative',
